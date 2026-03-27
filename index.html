@@ -442,12 +442,12 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
 .gallery-view.active{display:flex}
 
 /* ── VIEW 1: Projects Grid ── */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:20px 0 12px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;align-content: start}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:20px 0 12px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;align-content:start;min-height:0;grid-auto-rows:max-content}
 .projects-grid::-webkit-scrollbar{width:4px}
 .projects-grid::-webkit-scrollbar-thumb{background:var(--steel)}
-.project-card{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.05);transition:border-color .3s,transform .3s;background:var(--dark-2)}
+.project-card{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.05);transition:border-color .3s,transform .3s;background:var(--dark-2);display:flex;flex-direction:column}
 .project-card:hover{border-color:rgba(232,93,4,.45);transform:translateY(-2px)}
-.project-card-cover{position:relative;aspect-ratio:4/3;overflow:hidden}
+.project-card-cover{position:relative;aspect-ratio:4/3;overflow:hidden;flex-shrink:0}
 .project-card-cover-bg{position:absolute;inset:0;transition:transform .5s var(--ease-out)}
 .project-card:hover .project-card-cover-bg{transform:scale(1.06)}
 .project-card-cover-glow{position:absolute;inset:0;pointer-events:none}
