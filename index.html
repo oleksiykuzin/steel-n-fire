@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Steer &amp; Fire — Виготовлення металоконструкцій на замовлення</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+  --black:       #080808;
+  --dark:        #0f0f0f;
+  --dark-2:      #161616;
+  --dark-3:      #1e1e1e;
+  --steel:       #2c2c2c;
+  --metal:       #6b6b6b;
+  --silver:      #9a9a9a;
+  --light:       #d4d0c8;
+  --white:       #f0ede8;
+  --orange:      #e85d04;
+  --orange-2:    #f48c06;
+  --spark:       #ffd60a;
+  --glow:        rgba(232,93,4,0.35);
+  --glow-strong: rgba(232,93,4,0.6);
+  --font-display:   'Oswald', sans-serif;
+  --font-condensed: 'Roboto Condensed', sans-serif;
+  --font-body:      'Roboto', sans-serif;
+  --ease-out:    cubic-bezier(0.16,1,0.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--black);color:var(--light);font-family:var(--font-body);font-size:17px;line-height:1.6;overflow-x:hidden}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");opacity:.026;pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--black)}::-webkit-scrollbar-thumb{background:var(--orange);border-radius:2px}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 clamp(20px,5vw,80px);height:72px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,backdrop-filter .4s}
+nav.scrolled{background:rgba(8,8,8,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(232,93,4,.15)}
+.nav-logo{font-family:var(--font-display);font-size:1.6rem;letter-spacing:.08em;color:var(--white)}
+.nav-logo span{color:var(--orange)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:var(--font-condensed);font-size:.9rem;letter-spacing:.12em;text-transform:uppercase;color:var(--silver);transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--orange)}
+.nav-cta{background:var(--orange) !important;color:var(--black) !important;padding:10px 22px;font-weight:700 !important;transition:background .2s,transform .2s !important}
+.nav-cta:hover{background:var(--orange-2) !important;transform:translateY(-1px)}
+.nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer}
+.nav-burger span{width:24px;height:2px;background:var(--light);transition:.3s}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;padding:0 clamp(20px,6vw,120px)}
+.hero-bg{position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent,transparent 40px,rgba(255,255,255,.013) 40px,rgba(255,255,255,.013) 41px),repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(255,255,255,.018) 80px,rgba(255,255,255,.018) 81px),radial-gradient(ellipse 70% 60% at 60% 50%,#1a0d00 0%,#0a0a0a 60%,#080808 100%)}
+
+/* ─── Spark canvas: follows weld head, fades out after animation ─── */
+#sparksCanvas{
+  position:absolute;
+  left:0;
+  top:0;
+  width:260px;
+  height:260px;
+  transform:translate(-50%, -50%);
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .5s;
+  will-change:left, top, opacity;
+  mix-blend-mode:screen;
+}
+
+.hero-ghost{position:absolute;right:-.05em;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-size:clamp(200px,28vw,420px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.04);user-select:none;pointer-events:none;letter-spacing:-.02em}
+.hero-content{position:relative;z-index:2;max-width:820px}
+.hero-label{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-condensed);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:2rem;opacity:0;transform:translateY(16px);animation:fadeUp .8s var(--ease-out) .3s forwards}
+.hero-label::before{content:'';width:30px;height:1px;background:var(--orange)}
+.hero-h1{font-family:var(--font-display);font-size:clamp(52px,9vw,80px);line-height:1.05;letter-spacing:.02em;text-transform:uppercase;color:var(--white);margin-bottom:0}
+.hero-accent{color:var(--orange)}
+.hero-h1-line1,.hero-h1-line2,.hero-h1-line3{display:block;opacity:0;transform:translateY(30px)}
+.hero-h1-line1{animation:fadeUp .9s var(--ease-out) .5s forwards}
+.hero-h1-line2{animation:fadeUp .9s var(--ease-out) .65s forwards}
+.hero-h1-line3{animation:fadeUp .9s var(--ease-out) .8s forwards}
+.hero-sub{font-size:clamp(1rem,1.8vw,1.2rem);color:var(--silver);line-height:1.7;max-width:520px;margin-bottom:3rem;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease-out) 1.1s forwards}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;opacity:0;transform:translateY(20px);animation:fadeUp .8s var(--ease-out) 1.25s forwards}
+
+/* ─── Weld line SVG container ─── */
+.weld-container{position:relative;width:100%;margin:.6rem 0 2rem;overflow:visible}
+.weld-line-svg{width:100%;height:8px;overflow:visible;display:block}
+
+/* All initial states — JS takes over immediately at WELD_DELAY */
+.weld-path{fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px var(--orange)) drop-shadow(0 0 10px rgba(232,93,4,.5));opacity:0}
+.weld-glow{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;filter:blur(3px);opacity:0}
+.spark-head{fill:var(--spark);filter:drop-shadow(0 0 5px var(--spark)) drop-shadow(0 0 12px var(--orange-2));opacity:0}
+
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--orange);color:var(--black);font-family:var(--font-condensed);font-weight:700;font-size:1rem;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s var(--ease-out),box-shadow .3s}
+.btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .5s}
+.btn-primary:hover::before{transform:translateX(100%)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--glow-strong)}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border:1px solid rgba(255,255,255,.15);color:var(--light);font-family:var(--font-condensed);font-size:1rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeUp .8s var(--ease-out) 1.8s forwards;
+}
+
+.hero-scroll span {
+  font-family: var(--font-condensed);
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--metal);
+}
+
+.scroll-arrow {
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: .3; transform: translateY(0); }
+  50%       { opacity: 1;  transform: translateY(6px); }
+}
+
+/* ============================================================
+   SECTION UTILITIES
+   ============================================================ */
+section{padding:clamp(80px,12vh,140px) clamp(20px,6vw,120px)}
+.section-label{display:inline-flex;align-items:center;gap:12px;font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;color:var(--orange);margin-bottom:1.2rem}
+.section-label::before{content:'';width:24px;height:1px;background:var(--orange)}
+.section-title{font-family:var(--font-display);font-size:clamp(38px,6vw,78px);line-height:1.01;letter-spacing:.03em;text-transform:uppercase;color:var(--white);margin-bottom:1rem}
+.section-sub{font-size:1.05rem;color:var(--silver);max-width:560px;line-height:1.75}
+
+/* ============================================================
+   TICKER
+   ============================================================ */
+.ticker-wrap{overflow:hidden;background:var(--orange);padding:14px 0;white-space:nowrap}
+.ticker-track{display:inline-flex;animation:ticker 22s linear infinite}
+.ticker-track span{font-family:var(--font-display);font-size:1rem;letter-spacing:.12em;text-transform:uppercase;color:var(--black);padding:0 2.5rem}
+.ticker-track span.dot{color:rgba(0,0,0,.4);padding:0}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ============================================================
+   SERVICES GRID
+   ============================================================ */
+.services-section{background:var(--dark)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;margin-top:4rem}
+.service-card{position:relative;overflow:hidden;aspect-ratio:4/3;cursor:pointer;background:var(--dark-2);border:1px solid rgba(255,255,255,.04)}
+.service-card-bg{position:absolute;inset:0;transition:transform .6s var(--ease-out)}
+.service-card:hover .service-card-bg{transform:scale(1.07)}
+.svc-1 .service-card-bg{background:linear-gradient(135deg,#1a1208,#2d1800,#0f0a04)}
+.svc-2 .service-card-bg{background:linear-gradient(135deg,#0d1520,#1a2d3d,#0a0f15)}
+.svc-3 .service-card-bg{background:linear-gradient(135deg,#151008,#2a1f0f,#0c0905)}
+.svc-4 .service-card-bg{background:linear-gradient(135deg,#101810,#1d2e1d,#080f08)}
+.svc-5 .service-card-bg{background:linear-gradient(135deg,#1a0808,#2d1010,#0f0505)}
+.svc-6 .service-card-bg{background:linear-gradient(135deg,#180f00,#2e1e00,#0f0a00)}
+.svc-7 .service-card-bg{background:linear-gradient(135deg,#0f0f1a,#1a1a2d,#08080f)}
+.service-card-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:.12;font-size:80px;transition:opacity .4s}
+.service-card:hover .service-card-icon{opacity:.05}
+.service-card-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(8,8,8,.92) 100%);transition:background .4s}
+.service-card:hover .service-card-overlay{background:linear-gradient(180deg,rgba(232,93,4,.08) 0%,rgba(8,8,8,.94) 100%)}
+.service-card-content{position:absolute;bottom:0;left:0;right:0;padding:28px 24px 20px;transform:translateY(4px);transition:transform .4s var(--ease-out)}
+.service-card:hover .service-card-content{transform:translateY(0)}
+.service-card-title{font-family:var(--font-display);font-size:1.6rem;letter-spacing:.04em;text-transform:uppercase;color:var(--white);margin-bottom:4px}
+.service-card-desc{font-size:.85rem;color:var(--silver);line-height:1.5;opacity:0;transform:translateY(6px);transition:opacity .35s .05s,transform .35s .05s;margin-bottom:10px}
+.service-card:hover .service-card-desc{opacity:1;transform:translateY(0)}
+.service-card-view{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-condensed);font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);opacity:0;transform:translateY(4px);transition:opacity .3s .1s,transform .3s .1s}
+.service-card:hover .service-card-view{opacity:1;transform:translateY(0)}
+.service-card-arrow{position:absolute;top:20px;right:20px;width:34px;height:34px;border:1px solid rgba(232,93,4,.3);display:flex;align-items:center;justify-content:center;color:var(--orange);font-size:.95rem;opacity:0;transform:translateX(-6px);transition:opacity .3s,transform .3s}
+.service-card:hover .service-card-arrow{opacity:1;transform:translateX(0)}
+.service-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--orange);transition:width .5s var(--ease-out);box-shadow:0 0 8px var(--orange)}
+.service-card:hover::after{width:100%}
+
+/* ============================================================
+   USP SECTION
+   ============================================================ */
+.usp-section{background:var(--black);position:relative;overflow:hidden}
+.usp-section::before{content:'';position:absolute;right:-100px;top:-100px;width:600px;height:600px;border:1px solid rgba(232,93,4,.05);transform:rotate(15deg)}
+.usp-section::after{content:'';position:absolute;right:-50px;top:-50px;width:500px;height:500px;border:1px solid rgba(232,93,4,.07);transform:rotate(30deg)}
+.usp-layout{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,100px);align-items:center}
+.usp-headline{font-family:var(--font-display);font-size:clamp(36px,5vw,66px);line-height:1.01;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem}
+.usp-headline .highlight{color:var(--orange)}
+.usp-body{font-size:1.05rem;color:var(--silver);line-height:1.8;margin-bottom:2.5rem}
+.usp-examples{display:flex;flex-direction:column;gap:0;margin-top:2rem}
+.usp-example-item{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.05);transition:padding-left .3s}
+.usp-example-item:hover{padding-left:8px}
+.usp-example-num{font-family:var(--font-display);font-size:2rem;color:rgba(232,93,4,.2);width:50px;flex-shrink:0}
+.usp-example-text{font-family:var(--font-condensed);font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;color:var(--light)}
+.usp-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.stat-card{background:var(--dark-2);border:1px solid rgba(255,255,255,.04);padding:clamp(24px,3vw,40px);position:relative;overflow:hidden;transition:border-color .3s}
+.stat-card:hover{border-color:rgba(232,93,4,.3)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--orange);transition:height .4s var(--ease-out)}
+.stat-card:hover::before{height:100%}
+.stat-number{font-family:var(--font-display);font-size:clamp(3rem,5vw,5rem);line-height:1;color:var(--white);margin-bottom:6px}
+.stat-number span{color:var(--orange)}
+.stat-label{font-family:var(--font-condensed);font-size:.82rem;letter-spacing:.15em;text-transform:uppercase;color:var(--metal)}
+
+/* ============================================================
+   PORTFOLIO
+   ============================================================ */
+.portfolio-section{background:var(--dark)}
+.portfolio-layout{display:flex;align-items:center;gap:clamp(36px,5vw,72px)}
+.portfolio-text{flex:0 0 auto;width:clamp(220px,30%,380px)}
+.portfolio-collage{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.portfolio-row{display:flex;gap:3px;width:100%;overflow:hidden}
+.portfolio-item{overflow:hidden;cursor:pointer;background:var(--dark-3);position:relative;transition:transform .5s var(--ease-out);flex-shrink:0}
+.portfolio-img-bg{position:absolute;inset:0;transition:transform .7s var(--ease-out)}
+.portfolio-item:hover .portfolio-img-bg{transform:scale(1.06)}
+.pi-1 .portfolio-img-bg{background:linear-gradient(160deg,#0f1a12,#1a2e1d,#0a120c)}
+.pi-2 .portfolio-img-bg{background:linear-gradient(160deg,#1a1000,#2e1c00,#120c00)}
+.pi-3 .portfolio-img-bg{background:linear-gradient(160deg,#0a0f1a,#131e2e,#060a12)}
+.pi-4 .portfolio-img-bg{background:linear-gradient(160deg,#1a0a0a,#2e1212,#120606)}
+.pi-5 .portfolio-img-bg{background:linear-gradient(160deg,#100f0a,#1e1c10,#0a0905)}
+.pi-6 .portfolio-img-bg{background:linear-gradient(160deg,#0a1218,#121e28,#050a0f)}
+.portfolio-img-bg::after{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(90deg,transparent,transparent 6px,rgba(255,255,255,.012) 6px,rgba(255,255,255,.012) 7px)}
+.portfolio-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(50px,8vw,90px);opacity:.08;transition:opacity .3s,transform .4s}
+.portfolio-item:hover .portfolio-icon{opacity:.05;transform:scale(1.1)}
+.portfolio-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(8,8,8,.9) 100%);transition:background .4s}
+.portfolio-item:hover .portfolio-overlay{background:linear-gradient(180deg,rgba(232,93,4,.05) 0%,rgba(8,8,8,.93) 100%)}
+.portfolio-label{position:absolute;bottom:20px;left:20px;right:16px;font-family:var(--font-display);font-size:calc(var(--item-h,240px) * 0.058);line-height:1.2;letter-spacing:.04em;text-transform:uppercase;color:var(--white);opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s}
+.portfolio-item:hover .portfolio-label{opacity:1;transform:translateY(0)}
+.portfolio-tag{position:absolute;top:16px;right:16px;font-family:var(--font-condensed);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);border:1px solid rgba(232,93,4,.3);padding:5px 10px;background:rgba(8,8,8,.7);opacity:0;transform:translateX(8px);transition:opacity .4s,transform .4s}
+.portfolio-item:hover .portfolio-tag{opacity:1;transform:translateX(0)}
+.portfolio-cta-row{display:flex;margin-top:2rem}
+
+/* ============================================================
+   PROCESS
+   ============================================================ */
+
+.process-section {
+  background: var(--black);
+  position: relative;
+}
+
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin-top: 5rem;
+  position: relative;
+}
+
+/* линия */
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 32px;
+  left: calc(10% + 16px);
+  right: calc(10% + 16px);
+  height: 1px;
+  background: linear-gradient(90deg, var(--orange), rgba(232,93,4,.3));
+}
+
+.process-step {
+  padding: 0 1rem;
+  position: relative;
+
+  /* 🔥 фикс выравнивания */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.process-dot {
+  width: 64px;
+  height: 64px;
+  border: 1px solid rgba(232,93,4,.35);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  color: var(--orange);
+
+  /* 🔥 центрирование */
+  margin: 0 auto 2rem;
+
+  background: var(--black);
+  position: relative;
+  z-index: 1;
+
+  transition: background .3s, border-color .3s, color .3s;
+}
+
+.process-step:hover .process-dot {
+  background: var(--orange);
+  color: var(--black);
+  border-color: var(--orange);
+}
+
+.process-step-title {
+  font-family: var(--font-condensed);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.process-step-desc {
+  font-size: .85rem;
+  color: var(--metal);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   ABOUT / TRUST
+   ============================================================ */
+.about-section{background:var(--dark);overflow:hidden}
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
+.about-quote{font-family:var(--font-display);font-size:clamp(1.4rem,2.5vw,2.2rem);line-height:1.2;color:var(--white);text-transform:uppercase;margin:1.5rem 0;padding-left:20px;border-left:3px solid var(--orange)}
+.about-text{font-size:1rem;color:var(--silver);line-height:1.8;margin-bottom:1.5rem}
+.about-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:2rem}
+.badge{font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--light);border:1px solid rgba(255,255,255,.1);padding:8px 14px;transition:border-color .2s,color .2s}
+.badge:hover{border-color:rgba(232,93,4,.5);color:var(--orange)}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-section{background:var(--black);position:relative;overflow:hidden;text-align:center}
+.contact-section>.bg-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-display);font-size:clamp(120px,20vw,280px);color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.025);white-space:nowrap;pointer-events:none;user-select:none}
+.contact-content{position:relative;z-index:1}
+.contact-headline{font-family:var(--font-display);font-size:clamp(46px,8vw,100px);line-height:.95;text-transform:uppercase;color:var(--white);margin-bottom:1.5rem}
+.contact-headline span{color:var(--orange)}
+.contact-sub{font-size:1.1rem;color:var(--silver);margin:0 auto 3.5rem;max-width:500px;line-height:1.7}
+.contact-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:4rem}
+.btn-whatsapp,.btn-telegram{display:inline-flex;align-items:center;gap:12px;padding:18px 36px;color:#fff;font-family:var(--font-condensed);font-weight:700;font-size:1rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-whatsapp{background:#25D366}
+.btn-whatsapp:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,.3)}
+.btn-telegram{background:#0088cc}
+.btn-telegram:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,136,204,.3)}
+.contact-phone {
+  font-size: clamp(1.8rem,4vw,3.5rem);
+  display: block;
+  width: auto;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 0 !important;
+  font-size:
+}
+.contact-phone:hover{color:var(--orange)}
+.contact-phones-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto 0.5rem;
+}
+
+
+.contact-phone-label{font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--metal);margin-bottom:3rem}
+.contact-promise{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-condensed);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--metal);border:1px solid rgba(255,255,255,.06);padding:12px 24px}
+.contact-promise::before{content:'◆';color:var(--orange);font-size:.6rem}
+.btn-messenger{
+  display:inline-flex;
+  align-items:center;
+  gap:12px;
+  padding:18px 36px;
+  color:#fff;
+  font-family:var(--font-condensed);
+  font-weight:700;
+  font-size:1rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:transform .2s,box-shadow .2s;
+  background:#0084ff;
+}
+
+.btn-messenger:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 25px rgba(0,132,255,.3);
+}
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding:2.5rem clamp(20px,6vw,120px);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-logo{font-family:var(--font-display);font-size:1.4rem;letter-spacing:.08em;color:var(--white)}
+.footer-logo span{color:var(--orange)}
+.footer-copy{font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.12em;color:var(--metal);text-transform:uppercase}
+.footer-links{display:flex;gap:1.5rem;list-style:none}
+.footer-links a{font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--metal);transition:color .2s}
+.footer-links a:hover{color:var(--orange)}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}.reveal-delay-5{transition-delay:.5s}
+
+/* ============================================================
+   MOBILE MENU
+   ============================================================ */
+.mobile-menu{position:fixed;inset:0;background:rgba(8,8,8,.98);backdrop-filter:blur(20px);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;transform:translateX(100%);transition:transform .4s var(--ease-out)}
+.mobile-menu.open{transform:translateX(0)}
+.mobile-menu a{font-family:var(--font-display);font-size:clamp(2rem,7vw,3.5rem);letter-spacing:.05em;text-transform:uppercase;color:var(--white);transition:color .2s}
+.mobile-menu a:hover{color:var(--orange)}
+.mobile-close{position:absolute;top:24px;right:24px;background:none;border:1px solid rgba(255,255,255,.15);color:var(--white);width:44px;height:44px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* ============================================================
+   GALLERY MODAL — 2-LEVEL SYSTEM
+   ============================================================ */
+.gallery-modal{position:fixed;inset:0;z-index:500;background:rgba(5,5,5,.97);backdrop-filter:blur(16px);display:flex;align-items:stretch;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s var(--ease-out)}
+.gallery-modal.open{opacity:1;pointer-events:all}
+.gallery-modal-inner{width:100%;max-width:1380px;display:flex;flex-direction:column;padding:0 clamp(16px,3vw,48px);min-height:0;height:100%;overflow:hidden}
+
+/* Header */
+.gallery-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid rgba(255,255,255,.06);flex-shrink:0;gap:12px}
+.gallery-modal-title-row{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.gallery-modal-icon-lbl{font-size:1.3rem;flex-shrink:0}
+.gallery-modal-cat{font-family:var(--font-display);font-size:clamp(1rem,2.5vw,1.4rem);letter-spacing:.08em;text-transform:uppercase;color:var(--white);white-space:nowrap}
+.modal-breadcrumb{font-family:var(--font-condensed);font-size:.85rem;letter-spacing:.06em;color:var(--metal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
+.modal-breadcrumb.visible{display:block}
+.modal-breadcrumb::before{content:' / '}
+.gallery-modal-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.gallery-modal-counter{font-family:var(--font-condensed);font-size:.82rem;letter-spacing:.18em;color:var(--metal)}
+.gallery-modal-back{background:none;border:1px solid rgba(232,93,4,.4);color:var(--orange);padding:8px 16px;font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;display:none;align-items:center;gap:6px;transition:background .2s,color .2s;white-space:nowrap}
+.gallery-modal-back.visible{display:flex}
+.gallery-modal-back:hover{background:var(--orange);color:var(--black)}
+.gallery-modal-close{background:none;border:1px solid rgba(255,255,255,.15);color:var(--light);width:42px;height:42px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;flex-shrink:0}
+.gallery-modal-close:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── VIEW SWITCHING ── */
+.gallery-view{display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+.gallery-view.active{display:flex}
+
+/* ── VIEW 1: Projects Grid ── */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;padding:20px 0 12px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--steel) transparent;align-content: start}
+.projects-grid::-webkit-scrollbar{width:4px}
+.projects-grid::-webkit-scrollbar-thumb{background:var(--steel)}
+.project-card{position:relative;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.05);transition:border-color .3s,transform .3s;background:var(--dark-2)}
+.project-card:hover{border-color:rgba(232,93,4,.45);transform:translateY(-2px)}
+.project-card-cover{position:relative;aspect-ratio:4/3;overflow:hidden}
+.project-card-cover-bg{position:absolute;inset:0;transition:transform .5s var(--ease-out)}
+.project-card:hover .project-card-cover-bg{transform:scale(1.06)}
+.project-card-cover-glow{position:absolute;inset:0;pointer-events:none}
+.project-card-cover-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60px;opacity:.08;user-select:none}
+.project-card-cover-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(5,5,5,.9) 100%)}
+.project-card-count{position:absolute;top:10px;right:10px;font-family:var(--font-condensed);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--orange);border:1px solid rgba(232,93,4,.35);padding:4px 9px;background:rgba(5,5,5,.75)}
+.project-card-process-badge{position:absolute;top:10px;left:10px;font-family:var(--font-condensed);font-size:.62rem;letter-spacing:.1em;color:var(--metal);border:1px solid rgba(255,255,255,.1);padding:3px 7px;background:rgba(5,5,5,.75)}
+.project-card-info{padding:12px 14px 14px;position:relative}
+.project-card-title{font-family:var(--font-display);font-size:1rem;letter-spacing:.04em;text-transform:uppercase;color:var(--white);margin-bottom:4px;line-height:1.2}
+.project-card-meta{font-family:var(--font-condensed);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--metal);line-height:1.4}
+.project-card-cta{margin-top:10px;display:inline-flex;align-items:center;gap:5px;font-family:var(--font-condensed);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.project-card:hover .project-card-cta{opacity:1;transform:translateY(0)}
+.project-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--orange);transition:width .4s var(--ease-out)}
+.project-card:hover::after{width:100%}
+/* Lazy reveal for project cards */
+.project-card{opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out),border-color .3s}
+.project-card.lazy-visible{opacity:1;transform:translateY(0)}
+.project-card.lazy-visible:hover{transform:translateY(-2px)}
+
+/* ── VIEW 2: Photo tabs ── */
+.photo-tabs{display:flex;gap:2px;padding:14px 0 0;flex-shrink:0}
+.photo-tab{display:flex;align-items:center;gap:8px;padding:10px 20px;font-family:var(--font-condensed);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--metal);border:1px solid rgba(255,255,255,.08);background:none;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.photo-tab:hover{color:var(--light);border-color:rgba(255,255,255,.2)}
+.photo-tab.active{color:var(--orange);border-color:var(--orange);background:rgba(232,93,4,.07)}
+
+/* Stage (main image area) */
+.gallery-modal-stage{position:relative;flex:1;min-height:0;overflow:hidden;margin:12px 0 0;background:var(--dark-2);cursor:zoom-in}
+.gallery-img-wrap{width:100%;height:100%;position:relative;transition:opacity .28s}
+.zoom-hint{position:absolute;bottom:16px;right:16px;z-index:3;font-family:var(--font-condensed);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);pointer-events:none;display:flex;align-items:center;gap:5px;transition:opacity .3s}
+.gallery-modal-stage:hover .zoom-hint{opacity:.7}
+
+/* The CSS composition that acts as the "photo" */
+.gallery-comp{width:100%;height:100%;position:relative;overflow:hidden}
+.gallery-comp-bg{position:absolute;inset:0}
+.gallery-comp-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:50px 50px}
+.gallery-comp-glow{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.gallery-comp-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:clamp(90px,16vw,180px);opacity:.065;user-select:none}
+.gallery-comp-badge{position:absolute;top:24px;left:24px;font-family:var(--font-condensed);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--orange);border:1px solid rgba(232,93,4,.35);padding:6px 12px;background:rgba(5,5,5,.7)}
+.gallery-comp-caption{position:absolute;bottom:0;left:0;right:0;padding:28px 32px;background:linear-gradient(180deg,transparent,rgba(5,5,5,.95))}
+.gallery-comp-title{font-family:var(--font-display);font-size:clamp(1.1rem,2.5vw,1.9rem);letter-spacing:.04em;text-transform:uppercase;color:var(--white);margin-bottom:5px}
+.gallery-comp-meta{font-family:var(--font-condensed);font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--metal)}
+
+/* Nav arrows */
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(8,8,8,.75);border:1px solid rgba(255,255,255,.1);color:var(--white);width:52px;height:52px;font-size:1.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s,color .2s;z-index:2}
+.gallery-nav:hover{background:var(--orange);border-color:var(--orange);color:var(--black)}
+.gallery-nav:disabled{opacity:.25;pointer-events:none}
+.gallery-prev{left:12px}
+.gallery-next{right:12px}
+
+/* Thumbnail strip */
+.gallery-modal-thumbs{display:flex;gap:5px;padding:10px 0 8px;overflow-x:auto;flex-shrink:0;scrollbar-width:thin;scrollbar-color:var(--orange) transparent}
+.gallery-modal-thumbs::-webkit-scrollbar{height:3px}
+.gallery-modal-thumbs::-webkit-scrollbar-thumb{background:var(--orange)}
+.gallery-thumb{flex-shrink:0;width:86px;height:58px;cursor:pointer;position:relative;overflow:hidden;border:2px solid transparent;opacity:.4;transition:opacity .25s,border-color .25s}
+.gallery-thumb:hover{opacity:.7}
+.gallery-thumb.active{opacity:1;border-color:var(--orange)}
+.gallery-thumb-bg{position:absolute;inset:0}
+.gallery-thumb-glow{position:absolute;inset:0;pointer-events:none}
+/* Lazy thumbnails */
+.gallery-thumb{opacity:0;transition:opacity .4s}
+.gallery-thumb.thumb-loaded{opacity:.4}
+.gallery-thumb.thumb-loaded:hover{opacity:.7}
+.gallery-thumb.thumb-loaded.active{opacity:1}
+
+/* ── ZOOM OVERLAY ── */
+.zoom-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.97);opacity:0;pointer-events:none;transition:opacity .3s}
+.zoom-overlay.open{opacity:1;pointer-events:all}
+.zoom-canvas{position:absolute;inset:0;overflow:hidden;cursor:grab}
+.zoom-canvas.grabbing{cursor:grabbing}
+#zoomImg{position:absolute;top:50%;left:50%;transform-origin:center center;transform:translate(-50%,-50%) scale(1);max-width:none;max-height:none;user-select:none;pointer-events:none;transition:transform .15s ease}
+#zoomImg.no-transition{transition:none}
+.zoom-close{position:fixed;top:20px;right:20px;background:rgba(8,8,8,.85);border:1px solid rgba(255,255,255,.15);color:var(--white);width:44px;height:44px;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .2s,color .2s;z-index:602}
+.zoom-close:hover{border-color:var(--orange);color:var(--orange)}
+.zoom-hud{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;z-index:602;pointer-events:none}
+.zoom-label{font-family:var(--font-condensed);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.zoom-scale{font-family:var(--font-condensed);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);min-width:46px;text-align:center}
+.zoom-hint-row{position:fixed;top:20px;left:50%;transform:translateX(-50%);font-family:var(--font-condensed);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:white;z-index:602;pointer-events:none;white-space:nowrap}
+
+/* ============================================================
+   KEYFRAMES
+   ============================================================ */
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media(max-width:1024px){
+  .usp-layout{grid-template-columns:1fr}
+  .usp-stats{grid-template-columns:repeat(4,1fr)}
+  .about-layout{grid-template-columns:1fr}
+  .workshop-visual{max-height:320px}
+  .process-steps{grid-template-columns:1fr 1fr;gap:2.5rem}
+  .process-steps::before{display:none}
+}
+@media(max-width:768px){
+  .nav-links,.nav-cta{display:none}
+  .nav-burger{display:flex}
+  .hero{padding-top:100px}
+  .services-grid{grid-template-columns:1fr 1fr}
+  .portfolio-layout{flex-direction:column}
+  .portfolio-text{width:100%}
+  .usp-stats{grid-template-columns:1fr 1fr}
+  .process-steps{grid-template-columns:1fr}
+  footer{flex-direction:column;text-align:center}
+  .footer-links{justify-content:center}
+  .projects-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .photo-tabs{gap:1px}
+  .photo-tab{padding:8px 12px;font-size:.72rem}
+  .modal-breadcrumb{display:none !important}
+}
+@media(max-width:480px){
+  .services-grid{grid-template-columns:1fr}
+  .contact-buttons{flex-direction:column;align-items:center}
+  .gallery-nav{width:40px;height:40px;font-size:1.3rem}
+  .gallery-thumb{width:66px;height:46px}
+  .projects-grid{grid-template-columns:1fr 1fr;gap:6px}
+  .photo-tabs{flex-wrap:wrap}
+  .zoom-content{width:98vw;height:80vh}
+}
+/* ── Cover slideshow images inside project cards ── */
+.cover-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease;pointer-events:none}
+.cover-slide.active{opacity:1}
+.cover-no-photo{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:rgba(255,255,255,.12);font-family:var(--font-condensed);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase}
+.cover-no-photo svg{opacity:.18}
+
+/* ── Metallic shimmer for Process tab ── */
+#tabProcess{position:relative;overflow:hidden}
+#tabProcess::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 20%,rgba(210,200,180,.55) 47%,rgba(255,248,210,.5) 51%,rgba(180,170,140,.4) 55%,transparent 80%);background-size:300% 100%;background-position:150% center;animation:tabMetalShimmer 5s linear infinite;pointer-events:none}
+@keyframes tabMetalShimmer{0%{background-position:150% center;opacity:0}3%{opacity:1}20%{background-position:-50% center;opacity:0}100%{background-position:-50% center;opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-logo">STEEL<span>&</span>FIRE</div>
+  <ul class="nav-links">
+    <li><a href="#services">Послуги</a></li>
+    <li><a href="#portfolio">Роботи</a></li>
+    <li><a href="#process">Процес</a></li>
+    <li><a href="#about">Про мене</a></li>
+    <li><a href="#contact" class="nav-cta">Отримати розрахунок</a></li>
+  </ul>
+  <div class="nav-burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" onclick="toggleMenu()">✕</button>
+  <a href="#services" onclick="toggleMenu()">Послуги</a>
+  <a href="#portfolio" onclick="toggleMenu()">Роботи</a>
+  <a href="#process" onclick="toggleMenu()">Процес</a>
+  <a href="#about" onclick="toggleMenu()">Про мене</a>
+  <a href="#contact" onclick="toggleMenu()">Контакти</a>
+</div>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <!-- Canvas: initially opacity 0, fades in when weld starts, out when done -->
+  <canvas id="sparksCanvas"></canvas>
+  <div class="hero-ghost">STEEL</div>
+
+  <div class="hero-content">
+    <div class="hero-label">Виготовлення металоконструкцій на замовлення · З 2002 року</div>
+
+    <h1 class="hero-h1">
+      <span class="hero-h1-line1">Роблю</span>
+      <span class="hero-h1-line2">Металоконструкції</span>
+      <span class="hero-h1-line3"><span class="hero-accent">Будь-якої<br></span>Складності</span>
+    </h1>
+
+    <div class="weld-container">
+      <svg id="weldSvg" class="weld-line-svg" viewBox="0 0 800 8" preserveAspectRatio="none">
+        <!-- Glow layer: thick blurred orange halo behind the seam -->
+        <path class="weld-glow"
+          d="M0,4 Q40,1 80,5 T160,4 T240,3 T320,5 T400,4 T480,3 T560,5 T640,4 T720,3 T800,4"/>
+        <!-- Main seam: revealed left→right via JS-controlled dashoffset -->
+        <path class="weld-path"
+          d="M0,4 Q40,1 80,5 T160,4 T240,3 T320,5 T400,4 T480,3 T560,5 T640,4 T720,3 T800,4"/>
+        <!-- Spark head: positioned at getPointAtLength(drawn), pure JS -->
+        <circle class="spark-head" r="4.5" cx="-20" cy="4"/>
+      </svg>
+    </div>
+
+    <p class="hero-sub">
+      Алюміній, нержавійка, чавун — варю все. Виготовляю металоконструкції будь-якої складності — сходи, ворота, навіси,
+      скульптури, промислові конструкції. Справжня майстерня. Все виготовлено вручну.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary"><span>⚡</span> Обговорити Проєкт</a>
+      <a href="#portfolio" class="btn-ghost"><span>Переглянути Роботи</span> <span>→</span></a>
+    </div>
+  </div>
+
+<div class="hero-scroll">
+  <span>Вниз</span>
+  <svg class="scroll-arrow" width="20" height="54" viewBox="0 0 20 54" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="10" y1="0" x2="10" y2="42" stroke="var(--orange)" stroke-width="1"/>
+    <polyline points="2,34 10,46 18,34" stroke="var(--orange)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </svg>
+</div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="tickerTrack">
+    <span>Виготовлення Металоконструкцій</span><span class="dot">◆</span>
+    <span>Зварювання та Кування</span><span class="dot">◆</span>
+    <span>Сходи та Поручні</span><span class="dot">◆</span>
+    <span>Промислові Конструкції</span><span class="dot">◆</span>
+    <span>Художня Ковка</span><span class="dot">◆</span>
+    <span>Жоден Проєкт Для Мене Не Складний</span><span class="dot">◆</span>
+    <span>Власна Майстерня</span><span class="dot">◆</span>
+    <span>Виготовлення Металоконструкцій</span><span class="dot">◆</span>
+    <span>Зварювання та Кування</span><span class="dot">◆</span>
+    <span>Сходи та Поручні</span><span class="dot">◆</span>
+    <span>Промислові Конструкції</span><span class="dot">◆</span>
+    <span>Художня Ковка</span><span class="dot">◆</span>
+    <span>Жоден Проєкт Не Складний</span><span class="dot">◆</span>
+    <span>Власна Майстерня</span><span class="dot">◆</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     SERVICES
+     Each card has data-gallery="key" — click opens gallery modal
+     ============================================================ -->
+<section class="services-section" id="services">
+  <div class="reveal">
+    <div class="section-label">Що Я Будую</div>
+    <h2 class="section-title">Металеві<br>Конструкції</h2>
+    <p class="section-sub">Від функціональних до архітектурних — кожен проєкт виконується за специфікацією у моїй власній майстерні.</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card svc-1 reveal reveal-delay-1" data-gallery="Сходи">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">🪜</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Сходи</div>
+        <div class="service-card-desc">Металевий каркас, підвісні сходинки, спіральні або прямі — на замовлення для вашого простору.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-2 reveal reveal-delay-2" data-gallery="Перила">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">🔩</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Поручні</div>
+        <div class="service-card-desc">Внутрішні та зовнішні поручні. Ковані, зварні, з порошковим покриттям.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-3 reveal reveal-delay-3" data-gallery="Навіси">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">🏗️</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Навіси</div>
+        <div class="service-card-desc">Вхідні навіси, карпорти, перголи. Сталеві конструкції, захищені від погоди.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-4 reveal reveal-delay-1" data-gallery="Дашки">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">🏛️</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Дашки</div>
+        <div class="service-card-desc">Повністю металеві балконні рами та екрани приватності, спроєктовані з нуля.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-5 reveal reveal-delay-2" data-gallery="Двері">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">⚙️</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Двері</div>
+        <div class="service-card-desc">Рами, опори, стелажі, антресолі — промислового та комерційного масштабу.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-6 reveal reveal-delay-3" data-gallery="Ворота">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">🎨</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Ворота</div>
+        <div class="service-card-desc">Декоративні ворота, меблі, скульптури. Метал як мистецтво.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+    <div class="service-card svc-7 reveal reveal-delay-4" data-gallery="Інше">
+      <div class="service-card-bg"></div>
+      <div class="service-card-icon">✏️</div>
+      <div class="service-card-overlay"></div>
+      <div class="service-card-arrow">→</div>
+      <div class="service-card-content">
+        <div class="service-card-title">Інше</div>
+        <div class="service-card-desc">Є щось незвичайне? Принесіть свою ідею. Я все зроблю.</div>
+        <div class="service-card-view">Переглянути 4 проєкти ↗</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- USP -->
+<section class="usp-section" id="usp">
+  <div class="usp-layout">
+    <div>
+      <div class="reveal">
+        <div class="section-label">Чому Це Важливо</div>
+        <h2 class="usp-headline">Я Беруся<br>За <span class="highlight">Складні</span><br>Проєкти</h2>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <p class="usp-body">Більшість виробників обмежуються стандартними замовленнями. В своїй майстерні я роблю те, від яких відмовляються інші. Нестандартні форми, незвичайні кути, особливі матеріали — принесіть креслення або просто ідею.</p>
+      </div>
+      <div class="usp-examples reveal reveal-delay-2">
+        <div class="usp-example-item"><div class="usp-example-num">01</div><div class="usp-example-text">Металоконструкції будь-якої складності</div></div>
+        <div class="usp-example-item"><div class="usp-example-num">02</div><div class="usp-example-text">Усі види металів, включаючи алюміній, чавун та всі види кольорових металів</div></div>
+        <div class="usp-example-item"><div class="usp-example-num">03</div><div class="usp-example-text">Художнє та скульптурне металеве мистецтво</div></div>
+        <div class="usp-example-item"><div class="usp-example-num">04</div><div class="usp-example-text">Нестандартні несучі конструкції</div></div>
+      </div>
+    </div>
+    <div class="usp-stats reveal reveal-delay-2">
+      <div class="stat-card"><div class="stat-number">23<span>+</span></div><div class="stat-label">Років Досвіду</div></div>
+      <div class="stat-card"><div class="stat-number">1000<span>+</span></div><div class="stat-label">Виконаних Проєктів</div></div>
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Посередників</div></div>
+      <div class="stat-card"><div class="stat-number">0</div><div class="stat-label">Прихованих платежів</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO — clicking also opens gallery by service type -->
+<section class="portfolio-section" id="portfolio">
+  <div class="portfolio-layout">
+    <div class="portfolio-text reveal">
+      <div class="section-label">Нещодавні Роботи</div>
+      <h2 class="section-title">Зроблено<br>Руками</h2>
+      <p class="section-sub">Майже кожен проєкт сфотографований. Ніяких стокових фото — лише реальні проєкти.</p>
+      <div class="portfolio-cta-row"><a href="#contact" class="btn-primary"><span>Обмовити Свій Проєкт</span> <span>→</span></a></div>
+    </div>
+    <div class="portfolio-collage" id="portfolioCollage">
+      <div class="portfolio-item pi-1 reveal" data-gallery="Сходи" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🪜</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Вибране</div><div class="portfolio-label">Спіральні Сходи — Приватна Резиденція</div></div>
+      <div class="portfolio-item pi-2 reveal reveal-delay-1" data-gallery="Перила" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🔩</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Поручень</div><div class="portfolio-label">Скляно-сталеве Огородження</div></div>
+      <div class="portfolio-item pi-3 reveal reveal-delay-2" data-gallery="Навіси" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏗️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Конструкція</div><div class="portfolio-label">Промисловий Навіс</div></div>
+      <div class="portfolio-item pi-4 reveal reveal-delay-1" data-gallery="Ворота" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🎨</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Художнє</div><div class="portfolio-label">Ковані Ворота</div></div>
+      <div class="portfolio-item pi-5 reveal reveal-delay-2" data-gallery="Двері" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">⚙️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Індивідуальне</div><div class="portfolio-label">Рама Антресолі</div></div>
+      <div class="portfolio-item pi-6 reveal reveal-delay-3" data-gallery="Дашки" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏛️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Балкон</div><div class="portfolio-label">Конструкція Тераси</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process-section" id="process">
+  <div class="reveal" style="text-align:center;margin-bottom:1rem">
+    <div class="section-label" style="justify-content:center">Як Це Працює</div>
+    <h2 class="section-title" style="font-size:clamp(36px,5vw,66px)">Від Ідеї<br>До Металу</h2>
+  </div>
+  <div class="process-steps">
+    <div class="process-step reveal"><div class="process-dot">01</div><div class="process-step-title">Обговорення</div><div class="process-step-desc">Зателефонуйте, напишіть або принесіть ескіз. Я слухаю і задаю правильні питання.</div></div>
+    <div class="process-step reveal reveal-delay-1"><div class="process-dot">02</div><div class="process-step-title">Оцінка</div><div class="process-step-desc">Прозора розбивка вартості. Жодних прихованих платежів. Ціна підтверджується до початку робіт.</div></div>
+    <div class="process-step reveal reveal-delay-2"><div class="process-dot">03</div><div class="process-step-title">Проєктування</div><div class="process-step-desc">Технічне креслення. 3D моделювання. Точні виміри. Вибір матеріалів узгоджується з вами.</div></div>
+    <div class="process-step reveal reveal-delay-3"><div class="process-dot">04</div><div class="process-step-title">Виготовлення</div><div class="process-step-desc">Виготовляється у моїй власній майстерні. Ви можете відвідати, перевірити прогрес, задати питання.</div></div>
+    <div class="process-step reveal reveal-delay-4"><div class="process-dot">05</div><div class="process-step-title">Доставка</div><div class="process-step-desc">Доставка та монтаж. Готовий виріб перевіряємо разом.</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-layout">
+      <div class="workshop-visual reveal visible" style="width: 100%">
+        <iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Zhukovskoho%20Ln,%201,%20Cherkasy,%20Cherkas'ka%20oblast,%20Ukraine,%2018005+(%D0%9E%D0%BB%D0%B5%D0%BA%D1%81%D1%96%D0%B9%20%D0%9A%D1%83%D0%B7%D1%96%D0%BD)&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+      </div>
+      <div class="about-content reveal reveal-delay-2">
+        <div class="section-label">Майстер</div>
+        <blockquote class="about-quote">"Метал не бреше.<br>Я теж."</blockquote>
+        <p class="about-text">Я зварюю з тих пір, як міг тримати пальник. Двадцять три роки потому моя майстерня виконала все — від вишуканих кованих воріт до несучих промислових рам. Я не передаю роботу на аутсорс. Я не поспішаю. Кожен різ, кожен шов — зроблено мною.</p>
+        <p class="about-text">Мої клієнти — від власників будинків, які хочуть унікальні сходи, до компаній, яким потрібне спеціальне сталеве обладнання. Що їх об'єднує: вони прийшли тому, що стандартні виробники відмовили.</p>
+        <div class="about-badges">
+          <span class="badge">Всі види зварювання</span>
+          <span class="badge">Нержавійка</span>
+          <span class="badge">Алюміній</span>
+          <span class="badge">Чавун</span>
+          <span class="badge">Титан</span>
+          <span class="badge">Будь-який метал</span>
+          <span class="badge">Плазмове Різання</span>
+          <span class="badge">Гаряче Кування</span>
+          <span class="badge">Порошкове Покриття</span>
+          <span class="badge">Монтаж на Місці</span>
+        </div>
+      </div>
+  </div> </section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="bg-text">КОНТАКТИ</div>
+  <div class="contact-content">
+    <div class="reveal">
+      <div class="section-label" style="justify-content:center;margin-bottom:1.5rem">Готові Будувати?</div>
+      <h2 class="contact-headline">Створімо<br><span>Щось</span><br>Реальне</h2>
+      <p class="contact-sub">Опишіть свій проєкт — навіть приблизно. Я відповім вам протягом 2 годин з чесною відповіддю та приблизною оцінкою.</p>
+    </div>
+    <div class="reveal reveal-delay-1">
+    <div class="contact-phones-wrapper">
+      <a href="tel:+380635349922" class="contact-phone">+38 063 534 99 22</a>
+      <a href="tel:+380964206979" class="contact-phone">+38 096 420 69 79</a>
+    </div>
+   <p class="contact-phone-label">Дзвоніть або пишіть будь-коли · Пн–Сб 6:00–20:00</p>
+   </div>
+    <div class="contact-buttons reveal reveal-delay-2">
+      <a href="https://wa.me/380964206979" class="btn-whatsapp" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.114.552 4.097 1.518 5.814L0 24l6.335-1.518A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.044-1.396l-.361-.215-3.76.9.9-3.726-.236-.374A9.775 9.775 0 012.182 12c0-5.423 4.395-9.818 9.818-9.818 5.423 0 9.818 4.395 9.818 9.818 0 5.423-4.395 9.818-9.818 9.818z"/></svg>
+        WhatsApp
+      </a>
+
+      <a href="https://m.me/380964206979" class="btn-messenger" target="_blank" rel="noopener noreferrer">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 2C6.486 2 2 6.13 2 11.22c0 2.9 1.44 5.48 3.69 7.15V22l3.44-1.88c.93.26 1.91.4 2.87.4 5.514 0 10-4.13 10-9.22S17.514 2 12 2zm1.16 12.46-2.97-3.17-5.77 3.17 6.35-6.73 2.97 3.17 5.74-3.17-6.32 6.73z"/>
+  </svg>
+  Messenger
+</a>
+
+      <a href="https://t.me/metalmaster" class="btn-telegram" target="_blank">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </a>
+    </div>
+    <div class="reveal reveal-delay-3">
+      <p class="contact-promise">Без зобов'язань · Безкоштовна перша оцінка · Справжня майстерня</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">STEEL<span>&</span>FIRE</div>
+  <p class="footer-copy">© 2026 · Виготовлення металоконструкцій на замовлення · Усі права захищені</p>
+  <ul class="footer-links">
+    <li><a href="#services">Послуги</a></li>
+    <li><a href="#portfolio">Портфоліо</a></li>
+    <li><a href="#contact">Контакти</a></li>
+  </ul>
+</footer>
+
+<!-- ============================================================
+     GALLERY MODAL — 2-LEVEL
+     ============================================================ -->
+<div id="galleryModal" class="gallery-modal" role="dialog" aria-modal="true">
+  <div class="gallery-modal-inner">
+
+    <!-- Header (shared) -->
+    <div class="gallery-modal-header">
+      <div class="gallery-modal-title-row">
+        <span class="gallery-modal-icon-lbl" id="modalIcon"></span>
+        <span class="gallery-modal-cat" id="modalCat"></span>
+        <span class="modal-breadcrumb" id="modalBreadcrumb"></span>
+      </div>
+      <div class="gallery-modal-right">
+        <span class="gallery-modal-counter" id="modalCounter"></span>
+        <button class="gallery-modal-back" id="modalBack" aria-label="Назад до проєктів">← Проєкти</button>
+        <button class="gallery-modal-close" id="modalClose" aria-label="Закрити галерею">✕</button>
+      </div>
+    </div>
+
+    <!-- ── VIEW 1: Projects grid ── -->
+    <div class="gallery-view active" id="viewProjects">
+      <div class="projects-grid" id="projectsGrid">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- ── VIEW 2: Photo viewer ── -->
+    <div class="gallery-view" id="viewPhotos">
+      <!-- Tab switcher: Готові фото / Процес -->
+      <div class="photo-tabs">
+        <button class="photo-tab active" id="tabFinished">
+          📸 Готові фотографії
+        </button>
+        <button class="photo-tab" id="tabProcess">
+          🔧 Процес виготовлення
+        </button>
+      </div>
+      <!-- Main image stage -->
+      <div class="gallery-modal-stage" id="galleryStage">
+        <div class="gallery-img-wrap" id="galleryImgWrap">
+          <!-- populated by JS -->
+        </div>
+        <div class="zoom-hint">⊕ Натисніть для збільшення</div>
+        <button class="gallery-nav gallery-prev" id="galleryPrev" aria-label="Попереднє фото">‹</button>
+        <button class="gallery-nav gallery-next" id="galleryNext" aria-label="Наступне фото">›</button>
+      </div>
+      <!-- Thumbnail strip -->
+      <div class="gallery-modal-thumbs" id="galleryThumbs"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── ZOOM OVERLAY ── -->
+<div id="zoomOverlay" class="zoom-overlay" role="dialog" aria-modal="true">
+  <div class="zoom-canvas" id="zoomCanvas"><!-- img injected by JS --></div>
+  <button class="zoom-close" id="zoomClose" aria-label="Закрити збільшення">✕</button>
+  <div class="zoom-hint-row">Scroll — наблизити · Drag — панорама · Подвійний клік — скинути · Esc — закрити</div>
+  <div class="zoom-hud">
+    <span class="zoom-scale" id="zoomScaleEl">100%</span>
+    <span class="zoom-label">Натисніть Esc або ✕ для закриття</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     GALLERY DATA (зовнішній файл — не редагувати структуру)
+     ============================================================ -->
+<script src="gallery_data.js"></script>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+/* ─────────────────────────────────────────────────────────────
+   NAV SCROLL
+   ───────────────────────────────────────────────────────────── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE MENU
+   ───────────────────────────────────────────────────────────── */
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SCROLL REVEAL — IntersectionObserver
+   ───────────────────────────────────────────────────────────── */
+new IntersectionObserver((entries, obs) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' })
+.observe.bind(null);
+
+const revObs = new IntersectionObserver((entries, obs) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* ─────────────────────────────────────────────────────────────
+   HERO PARALLAX
+   ───────────────────────────────────────────────────────────── */
+const heroGhost = document.querySelector('.hero-ghost');
+window.addEventListener('scroll', () => {
+  if (heroGhost) heroGhost.style.transform = `translateY(calc(-50% + ${window.scrollY * 0.15}px))`;
+}, { passive: true });
+
+/* ─────────────────────────────────────────────────────────────
+   PORTFOLIO — 3-D tilt on mouse move
+   ───────────────────────────────────────────────────────────── */
+document.querySelectorAll('.portfolio-item').forEach(item => {
+  item.addEventListener('mousemove', e => {
+    const r = item.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  - 0.5) * 8;
+    const y = ((e.clientY - r.top)  / r.height - 0.5) * 8;
+    item.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${-y}deg) scale(1.01)`;
+  });
+  item.addEventListener('mouseleave', () => {
+    item.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
+    item.style.transform  = '';
+    setTimeout(() => { item.style.transition = ''; }, 500);
+  });
+});
+
+/* ─────────────────────────────────────────────────────────────
+   WELD ANIMATION — 100% JavaScript-driven RAF
+   ─────────────────────────────────────────────────────────────
+   Flow:
+   1. On init: getTotalLength(), set dasharray/dashoffset to hide paths.
+   2. After WELD_DELAY ms: fade in sparksCanvas, start RAF loop.
+   3. Each frame: advance draw progress, update dashoffset to reveal
+      the seam up to the current point; move spark-head circle to
+      getPointAtLength(drawn); convert SVG coords → canvas coords
+      and set global srcX/srcY so the particle system emits from there.
+   4. Subtle opacity flicker simulates imperfect weld arc.
+   5. When t=1: hide spark-head, trigger canvas fade-out.
+   ───────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────
+   WELD ANIMATION — canvas follows the spark head
+   ───────────────────────────────────────────────────────────── */
+const weldPathEl   = document.querySelector('.weld-path');
+const weldGlowEl   = document.querySelector('.weld-glow');
+const sparkHeadEl  = document.querySelector('.spark-head');
+const sparksCanvas = document.getElementById('sparksCanvas');
+const ctx          = sparksCanvas.getContext('2d');
+
+const WELD_DELAY     = 2500;
+const WELD_DURATION  = 2500;
+const CANVAS_SIZE    = 260; // CSS pixels
+const DPR            = Math.max(1, window.devicePixelRatio || 1);
+
+let pathLen    = 0;
+let weldT0     = null;
+let weldActive = false;
+let canvasLife = 0;
+let canvasRAF  = 0;
+
+let headX = -9999;
+let headY = -9999;
+
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}
+
+function resizeCanvas() {
+  sparksCanvas.width  = Math.round(CANVAS_SIZE * DPR);
+  sparksCanvas.height = Math.round(CANVAS_SIZE * DPR);
+
+  // Рисуем в CSS-координатах
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+
+function positionCanvasAt(x, y) {
+  sparksCanvas.style.left = `${x}px`;
+  sparksCanvas.style.top  = `${y}px`;
+}
+
+function initWeld() {
+  requestAnimationFrame(() => {
+    pathLen = weldPathEl.getTotalLength();
+
+    [weldPathEl, weldGlowEl].forEach(p => {
+      p.style.strokeDasharray  = pathLen;
+      p.style.strokeDashoffset = pathLen;
+    });
+
+    sparkHeadEl.style.opacity = '0';
+    resizeCanvas();
+
+    setTimeout(() => {
+      sparksCanvas.style.transition = 'opacity .6s';
+      sparksCanvas.style.opacity = '0.95';
+      canvasLife = 0.95;
+      weldActive = true;
+      requestAnimationFrame(tickWeld);
+      if (!canvasRAF) canvasRAF = requestAnimationFrame(animateSparks);
+    }, WELD_DELAY);
+  });
+}
+
+function tickWeld(now) {
+  if (!weldT0) weldT0 = now;
+
+  const t      = Math.min((now - weldT0) / WELD_DURATION, 1);
+  const eased  = easeOutCubic(t);
+  const drawn  = eased * pathLen;
+  const remain = pathLen - drawn;
+
+  weldPathEl.style.strokeDashoffset = remain;
+  weldGlowEl.style.strokeDashoffset = remain;
+
+  weldPathEl.style.opacity = (0.88 + Math.random() * 0.12).toString();
+  weldGlowEl.style.opacity = (0.20 + Math.random() * 0.22).toString();
+
+  const pt = weldPathEl.getPointAtLength(Math.max(0, drawn));
+  sparkHeadEl.setAttribute('cx', pt.x);
+  sparkHeadEl.setAttribute('cy', pt.y);
+  sparkHeadEl.style.opacity = t > 0.005 ? '1' : '0';
+
+  const svgRect   = weldPathEl.closest('svg').getBoundingClientRect();
+  const heroRect  = sparksCanvas.parentElement.getBoundingClientRect();
+
+  headX = svgRect.left + (pt.x / 800) * svgRect.width  - heroRect.left;
+  headY = svgRect.top  + (pt.y / 8)   * svgRect.height - heroRect.top;
+
+  positionCanvasAt(headX, headY);
+
+  if (t < 1) {
+    requestAnimationFrame(tickWeld);
+  } else {
+    sparkHeadEl.style.opacity = '0';
+    weldPathEl.style.opacity   = '1';
+    weldGlowEl.style.opacity   = '0.3';
+    weldActive = false;
+    requestAnimationFrame(fadeCanvas);
+  }
+}
+
+function fadeCanvas() {
+  canvasLife -= 0.016;
+  const op = Math.max(0, canvasLife);
+  sparksCanvas.style.transition = 'none';
+  sparksCanvas.style.opacity = op;
+
+  if (op > 0) {
+    requestAnimationFrame(fadeCanvas);
+  } else {
+    sparksCanvas.style.display = 'none';
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SPARK PARTICLES — local coordinates around canvas center
+   ───────────────────────────────────────────────────────────── */
+class Spark {
+  constructor(stagger) {
+    this.life = stagger || 0;
+    this.maxLife = 1;
+    this._init();
+  }
+
+  _init() {
+    const cx = CANVAS_SIZE / 2;
+    const cy = CANVAS_SIZE / 2;
+
+    this.x = cx + (Math.random() - 0.5) * 6;
+    this.y = cy + (Math.random() - 0.5) * 6;
+
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = 0.7 + Math.random() * 3.5;
+
+    this.vx = Math.cos(angle) * spd;
+    this.vy = Math.sin(angle) * spd - 1.6;
+    this.g  = 0.05 + Math.random() * 0.04;
+
+    this.life = 0;
+    this.maxLife = 45 + Math.random() * 75;
+    this.size = 0.5 + Math.random() * 2;
+
+    const tmp = Math.random();
+    this.r  = Math.round(232 + tmp * 23);
+    this.g2 = Math.round(93  + tmp * 121);
+    this.trail = [];
+  }
+
+  update() {
+    this.trail.push({ x: this.x, y: this.y });
+    if (this.trail.length > 5) this.trail.shift();
+
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.g;
+    this.vx *= 0.985;
+
+    this.life++;
+
+    if (this.life > this.maxLife) {
+      if (weldActive) this._init();
+      else this.life = 999;
+    }
+  }
+
+  draw() {
+    if (this.life >= this.maxLife) return;
+
+    const prog  = this.life / this.maxLife;
+    const alpha = Math.sin(prog * Math.PI) * 0.9;
+
+    if (this.trail.length > 1) {
+      ctx.beginPath();
+      ctx.moveTo(this.trail[0].x, this.trail[0].y);
+      for (let i = 1; i < this.trail.length; i++) {
+        ctx.lineTo(this.trail[i].x, this.trail[i].y);
+      }
+      ctx.strokeStyle = `rgba(${this.r},${this.g2},4,${alpha * 0.35})`;
+      ctx.lineWidth = this.size * 0.5;
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * (1 - prog * 0.4), 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.r},${this.g2},4,${alpha})`;
+    ctx.fill();
+
+    const grd = ctx.createRadialGradient(
+      this.x, this.y, 0,
+      this.x, this.y, this.size * 5
+    );
+    grd.addColorStop(0, `rgba(${this.r},${this.g2},4,${alpha * 0.45})`);
+    grd.addColorStop(1, 'transparent');
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size * 5, 0, Math.PI * 2);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  }
+}
+
+const sparks = Array.from({ length: 55 }, (_, i) => new Spark(Math.random() * 90));
+
+function animateSparks() {
+  ctx.clearRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+  if (parseFloat(sparksCanvas.style.opacity || '0') > 0) {
+    sparks.forEach(s => {
+      s.update();
+      s.draw();
+    });
+  }
+
+  if (sparksCanvas.style.display !== 'none') {
+    canvasRAF = requestAnimationFrame(animateSparks);
+  } else {
+    canvasRAF = 0;
+  }
+}
+
+window.addEventListener('resize', () => {
+  resizeCanvas();
+  if (headX > -1000) positionCanvasAt(headX, headY);
+}, { passive: true });
+
+initWeld();
+
+
+/* ═════════════════════════════════════════════════════════════
+   GALLERY ENGINE — 2-LEVEL MODAL
+   Дані надходять з gallery_data.js (const GALLERY)
+   Структура: GALLERY[key].projects[].{ title, meta,
+     cover_sources[], finished[]{src,thumb,caption},
+     process[]{src,thumb,caption} }
+   ═════════════════════════════════════════════════════════════ */
+
+/* ── Icon map per category name ── */
+const CAT_ICONS = {
+  "Сходи":  "🪜",
+  "Перила": "🔩",
+  "Навіси": "🏗️",
+  "Дашки":  "🏠",
+  "Двері":  "🚪",
+  "Ворота": "🔗",
+  "Інше":   "✨",
+};
+
+/* ── DOM refs ── */
+const modal        = document.getElementById('galleryModal');
+const viewProjects = document.getElementById('viewProjects');
+const viewPhotos   = document.getElementById('viewPhotos');
+const projectsGrid = document.getElementById('projectsGrid');
+const imgWrap      = document.getElementById('galleryImgWrap');
+const thumbsEl     = document.getElementById('galleryThumbs');
+const prevBtn      = document.getElementById('galleryPrev');
+const nextBtn      = document.getElementById('galleryNext');
+const closeBtn     = document.getElementById('modalClose');
+const backBtn      = document.getElementById('modalBack');
+const counterEl    = document.getElementById('modalCounter');
+const catEl        = document.getElementById('modalCat');
+const iconEl       = document.getElementById('modalIcon');
+const breadcrumb   = document.getElementById('modalBreadcrumb');
+const tabFinished  = document.getElementById('tabFinished');
+const tabProcess   = document.getElementById('tabProcess');
+const zoomOverlay  = document.getElementById('zoomOverlay');
+const zoomCanvas   = document.getElementById('zoomCanvas');
+const zoomClose    = document.getElementById('zoomClose');
+const zoomScaleEl  = document.getElementById('zoomScaleEl');
+const zCanvas = zoomCanvas; /* alias */
+const galleryStage = document.getElementById('galleryStage');
+
+/* ── State ── */
+let currentKey     = null;
+let currentProject = null;
+let currentTab     = 'finished';
+let currentIdx     = 0;
+let touchStartX    = 0;
+let coverTimers    = [];
+
+/* ── Lazy observer for project cards ── */
+const lazyObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('lazy-visible'); lazyObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '40px' });
+
+/* ─── Build cover area for a project card ─── */
+function buildCardCover(proj, key) {
+  const icon = CAT_ICONS[key] || '🔩';
+  if (proj.cover_sources && proj.cover_sources.length > 0) {
+    const imgs = proj.cover_sources.map((src, i) =>
+      `<img class="cover-slide${i === 0 ? ' active' : ''}" src="${src}" alt="" loading="lazy">`
+    ).join('');
+    return imgs + `<div class="project-card-cover-overlay"></div>`;
+  }
+  if (proj.finished && proj.finished.length > 0 && (proj.finished[0].thumb || proj.finished[0].src)) {
+    const coverSrc = proj.finished[0].thumb || proj.finished[0].src;
+    return `<img class="cover-slide active" src="${coverSrc}" alt="" loading="lazy">
+            <div class="project-card-cover-overlay"></div>`;
+  }
+  /* No photo yet */
+  return `
+    <div style="position:absolute;inset:0;background:var(--dark-3)"></div>
+    <div class="cover-no-photo">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Фото незабаром
+    </div>
+    <div class="project-card-cover-overlay"></div>`;
+}
+
+/* ─── Build main photo / placeholder for stage ─── */
+function buildComp(item, key, proj) {
+  if (item && item.src) {
+    return `
+      <div class="gallery-comp" style="background:#0a0a0a">
+        <img src="${item.src}" alt="${item.caption || proj.title}"
+             loading="lazy"
+             style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain">
+        ${item.caption ? `<div class="gallery-comp-badge">${item.caption}</div>` : ''}
+        <div class="gallery-comp-caption">
+          <div class="gallery-comp-title">${proj.title}</div>
+          ${proj.meta ? `<div class="gallery-comp-meta">${proj.meta}</div>` : ''}
+        </div>
+      </div>`;
+  }
+  /* Placeholder when no photo */
+  return `
+    <div class="gallery-comp" style="background:var(--dark-3);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;color:rgba(255,255,255,.15)">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      <span style="font-family:var(--font-condensed);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase">Фото незабаром</span>
+      <div class="gallery-comp-caption">
+        <div class="gallery-comp-title">${proj.title}</div>
+        ${proj.meta ? `<div class="gallery-comp-meta">${proj.meta}</div>` : ''}
+      </div>
+    </div>`;
+}
+
+/* ─── Build thumbnail ─── */
+function buildThumb(item, idx) {
+  if (item && item.thumb) {
+    return `<div class="gallery-thumb thumb-loaded" data-idx="${idx}">
+      <img src="${item.thumb}" alt="" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    </div>`;
+  }
+  if (item && item.src) {
+    return `<div class="gallery-thumb thumb-loaded" data-idx="${idx}">
+      <img src="${item.src}" alt="" loading="lazy"
+           style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    </div>`;
+  }
+  return `<div class="gallery-thumb thumb-loaded" data-idx="${idx}"
+               style="background:var(--dark-3);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.1)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+  </div>`;
+}
+
+/* ─── Slideshow for cover images ─── */
+function startCoverSlideshows() {
+  stopCoverSlideshows();
+  projectsGrid.querySelectorAll('.project-card').forEach(card => {
+    const slides = card.querySelectorAll('.cover-slide');
+    if (slides.length < 2) return;
+    let idx = 0;
+    const tid = setInterval(() => {
+      slides[idx].classList.remove('active');
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add('active');
+    }, 5000);
+    coverTimers.push(tid);
+  });
+}
+function stopCoverSlideshows() {
+  coverTimers.forEach(clearInterval);
+  coverTimers = [];
+}
+
+/* ─── Populate projects grid for a given category key ─── */
+function populateProjectsGrid(key) {
+  const data = GALLERY[key];
+  if (!data) return;
+
+  projectsGrid.innerHTML = data.projects.map((proj, pIdx) => {
+    const finCount  = proj.finished ? proj.finished.length : 0;
+    const procCount = proj.process  ? proj.process.length  : 0;
+    return `
+      <div class="project-card" data-key="${key}" data-pidx="${pIdx}" tabindex="0" role="button"
+           aria-label="Відкрити проєкт: ${proj.title}">
+        <div class="project-card-cover">
+          ${buildCardCover(proj, key)}
+          <div class="project-card-count">📸 ${finCount} фото</div>
+          ${procCount > 0 ? `<div class="project-card-process-badge">🔧 ${procCount} WIP</div>` : ''}
+        </div>
+        <div class="project-card-info">
+          <div class="project-card-title">${proj.title}</div>
+          ${proj.meta ? `<div class="project-card-meta">${proj.meta}</div>` : ''}
+          <div class="project-card-cta">Переглянути проєкт →</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  projectsGrid.querySelectorAll('.project-card').forEach((card, i) => {
+    card.style.transitionDelay = `${i * 60}ms`;
+    lazyObs.observe(card);
+  });
+}
+
+/* ─── LEVEL 1: Open category → show projects grid ─── */
+function openCategory(key) {
+  const data = GALLERY[key];
+  if (!data) return;
+  currentKey = key;
+
+  const icon = CAT_ICONS[key] || '🔩';
+  iconEl.textContent     = icon;
+  catEl.textContent      = data.label || key;
+  breadcrumb.textContent = '';
+  breadcrumb.classList.remove('visible');
+  counterEl.textContent  = `${data.projects.length} проєктів`;
+  backBtn.classList.remove('visible');
+
+  populateProjectsGrid(key);
+  startCoverSlideshows();
+
+  viewProjects.classList.add('active');
+  viewPhotos.classList.remove('active');
+  openModal();
+}
+
+/* ─── LEVEL 2: Open project photos ─── */
+function openProject(key, pIdx, tab = 'finished') {
+  const data = GALLERY[key];
+  if (!data) return;
+  currentKey     = key;
+  currentProject = pIdx;
+  currentTab     = tab;
+  currentIdx     = 0;
+
+  /* Always ensure the projects grid is populated for this category
+     so that the back button always returns to the correct project list */
+  populateProjectsGrid(key);
+
+  const proj = data.projects[pIdx];
+  iconEl.textContent     = CAT_ICONS[key] || '🔩';
+  catEl.textContent      = data.label || key;
+  breadcrumb.textContent = proj.title;
+  breadcrumb.classList.add('visible');
+  backBtn.classList.add('visible');
+
+  /* Show/hide Process tab depending on whether there are process photos */
+  const procPhotos = proj.process || [];
+  tabProcess.style.display = procPhotos.length > 0 ? '' : 'none';
+  /* If current tab is 'process' but there are no process photos, switch to finished */
+  if (procPhotos.length === 0 && tab === 'process') tab = 'finished';
+
+  setActiveTab(tab, false);
+
+  viewProjects.classList.remove('active');
+  viewPhotos.classList.add('active');
+  renderItem(0, false);
+  openModal();
+}
+
+/* ─── Switch finished / process tab ─── */
+function setActiveTab(tab, rerender = true) {
+  currentTab = tab;
+  currentIdx = 0;
+  tabFinished.classList.toggle('active', tab === 'finished');
+  tabProcess.classList.toggle('active',  tab === 'process');
+
+  const proj   = GALLERY[currentKey].projects[currentProject];
+  const photos = tab === 'finished' ? (proj.finished || []) : (proj.process || []);
+  const label  = tab === 'finished' ? 'Готових фото' : 'Фото процесу';
+  counterEl.textContent = `${photos.length} ${label}`;
+
+  thumbsEl.innerHTML = photos.length
+    ? photos.map((it, i) => buildThumb(it, i)).join('')
+    : `<div style="padding:10px;font-family:var(--font-condensed);font-size:.75rem;color:var(--metal);letter-spacing:.12em;text-transform:uppercase">Фото незабаром</div>`;
+
+  if (rerender) renderItem(0, false);
+}
+
+/* ─── Render photo at index ─── */
+function renderItem(idx, animate = true) {
+  const proj   = GALLERY[currentKey].projects[currentProject];
+  const photos = currentTab === 'finished' ? (proj.finished || []) : (proj.process || []);
+  currentIdx   = photos.length ? (((idx % photos.length) + photos.length) % photos.length) : 0;
+  const item   = photos[currentIdx] || null;
+
+  counterEl.textContent = photos.length
+    ? `${currentIdx + 1} / ${photos.length} · ${currentTab === 'finished' ? 'Готові фото' : 'Процес'}`
+    : currentTab === 'finished' ? 'Готових фото: 0' : 'Фото процесу: 0';
+
+  /* Thumbnails highlight */
+  thumbsEl.querySelectorAll('.gallery-thumb').forEach((th, i) => {
+    th.classList.toggle('active', i === currentIdx);
+  });
+  const activeThumb = thumbsEl.children[currentIdx];
+  if (activeThumb) activeThumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+  const html = buildComp(item, currentKey, proj);
+  if (animate) {
+    imgWrap.style.opacity = '0';
+    setTimeout(() => { imgWrap.innerHTML = html; imgWrap.style.opacity = '1'; }, 220);
+  } else {
+    imgWrap.innerHTML = html;
+    imgWrap.style.transition = 'none';
+    imgWrap.style.opacity = '1';
+    requestAnimationFrame(() => { imgWrap.style.transition = 'opacity .28s'; });
+  }
+}
+
+/* ─── Zoom overlay — pan + wheel zoom ─── */
+let zScale = 1, zPanX = 0, zPanY = 0;
+let zDragActive = false, zDragX = 0, zDragY = 0, zDragMoved = false;
+let zPinchDist = null;
+const Z_MIN = 0.5, Z_MAX = 8;
+
+function zImg() { return document.getElementById('zoomImg'); }
+
+function zApply(animated) {
+  const img = zImg(); if (!img) return;
+  img.classList.toggle('no-transition', !animated);
+  img.style.transform = `translate(calc(-50% + ${zPanX}px), calc(-50% + ${zPanY}px)) scale(${zScale})`;
+  if (zoomScaleEl) zoomScaleEl.textContent = Math.round(zScale * 100) + '%';
+}
+
+function zClampPan() {
+  const img = zImg(); if (!img) return;
+  const iw = img.naturalWidth  * zScale;
+  const ih = img.naturalHeight * zScale;
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const mx = Math.max(0, (iw - vw) / 2);
+  const my = Math.max(0, (ih - vh) / 2);
+  zPanX = Math.max(-mx, Math.min(mx, zPanX));
+  zPanY = Math.max(-my, Math.min(my, zPanY));
+}
+
+/* cleaner zoom-at-point */
+function zoomAtPoint(factor, cx, cy) {
+  const prev = zScale;
+  zScale = Math.max(Z_MIN, Math.min(Z_MAX, prev * factor));
+  const r = zScale / prev;
+  /* point in image space stays fixed */
+  const dx = cx - window.innerWidth  / 2;
+  const dy = cy - window.innerHeight / 2;
+  zPanX = (zPanX - dx) * r + dx;
+  zPanY = (zPanY - dy) * r + dy;
+  zClampPan();
+  zApply(false);
+}
+
+function openZoom() {
+  if (currentProject === null) return;
+  const proj   = GALLERY[currentKey].projects[currentProject];
+  const photos = currentTab === 'finished' ? (proj.finished || []) : (proj.process || []);
+  const item   = photos[currentIdx] || null;
+  if (!item || !item.src) return;
+
+  zScale = 1; zPanX = 0; zPanY = 0;
+  zCanvas.innerHTML = '';
+  const img = document.createElement('img');
+  img.id = 'zoomImg';
+  img.src = item.src;
+  img.alt = item.caption || proj.title;
+  img.draggable = false;
+  /* fit to viewport on load */
+  img.onload = () => {
+    const fitW = window.innerWidth  * 0.92 / img.naturalWidth;
+    const fitH = window.innerHeight * 0.88 / img.naturalHeight;
+    zScale = Math.min(fitW, fitH, 1);
+    zPanX = 0; zPanY = 0;
+    zApply(true);
+  };
+  zCanvas.appendChild(img);
+  zApply(false);
+  zoomOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeZoom() {
+  zoomOverlay.classList.remove('open');
+  zScale = 1; zPanX = 0; zPanY = 0;
+  setTimeout(() => { zCanvas.innerHTML = ''; }, 320);
+}
+
+/* ── Zoom: wheel ── */
+zCanvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+  zoomAtPoint(factor, e.clientX, e.clientY);
+}, { passive: false });
+
+/* ── Zoom: mouse drag ── */
+zCanvas.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  zDragActive = true; zDragMoved = false;
+  zDragX = e.clientX - zPanX;
+  zDragY = e.clientY - zPanY;
+  zCanvas.classList.add('grabbing');
+});
+window.addEventListener('mousemove', e => {
+  if (!zDragActive) return;
+  const dx = e.clientX - zDragX;
+  const dy = e.clientY - zDragY;
+  if (Math.abs(dx - zPanX) > 3 || Math.abs(dy - zPanY) > 3) zDragMoved = true;
+  zPanX = e.clientX - zDragX;
+  zPanY = e.clientY - zDragY;
+  zClampPan();
+  zApply(false);
+});
+window.addEventListener('mouseup', () => {
+  zDragActive = false;
+  zCanvas.classList.remove('grabbing');
+});
+
+/* ── Zoom: double-click to reset or zoom in ── */
+zCanvas.addEventListener('dblclick', e => {
+  if (zScale > 1.05) {
+    zScale = 1; zPanX = 0; zPanY = 0; zApply(true);
+  } else {
+    zoomAtPoint(3, e.clientX, e.clientY);
+  }
+});
+
+/* ── Zoom: touch pinch & drag ── */
+zCanvas.addEventListener('touchstart', e => {
+  if (e.touches.length === 2) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    zPinchDist = Math.hypot(dx, dy);
+  } else if (e.touches.length === 1) {
+    zDragActive = true;
+    zDragX = e.touches[0].clientX - zPanX;
+    zDragY = e.touches[0].clientY - zPanY;
+  }
+}, { passive: true });
+zCanvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 2 && zPinchDist !== null) {
+    const dx = e.touches[0].clientX - e.touches[1].clientX;
+    const dy = e.touches[0].clientY - e.touches[1].clientY;
+    const dist = Math.hypot(dx, dy);
+    const cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+    const cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+    zoomAtPoint(dist / zPinchDist, cx, cy);
+    zPinchDist = dist;
+  } else if (e.touches.length === 1 && zDragActive) {
+    zPanX = e.touches[0].clientX - zDragX;
+    zPanY = e.touches[0].clientY - zDragY;
+    zClampPan();
+    zApply(false);
+  }
+}, { passive: false });
+zCanvas.addEventListener('touchend', e => {
+  if (e.touches.length < 2) zPinchDist = null;
+  if (e.touches.length === 0) zDragActive = false;
+}, { passive: true });
+
+/* ─── Modal open / close ─── */
+function openModal() {
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  stopCoverSlideshows();
+}
+
+/* ─── Event listeners ─── */
+prevBtn.addEventListener('click', () => renderItem(currentIdx - 1));
+nextBtn.addEventListener('click', () => renderItem(currentIdx + 1));
+closeBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+
+backBtn.addEventListener('click', () => {
+  const data = GALLERY[currentKey];
+
+  /* Restore category-level header */
+  iconEl.textContent    = CAT_ICONS[currentKey] || '🔩';
+  catEl.textContent     = data.label || currentKey;
+  counterEl.textContent = `${data.projects.length} проєктів`;
+
+  breadcrumb.classList.remove('visible');
+  backBtn.classList.remove('visible');
+  tabProcess.style.display = '';   /* reset — next project decides its own visibility */
+
+  viewPhotos.classList.remove('active');
+  viewProjects.classList.add('active');
+  startCoverSlideshows();
+});
+
+tabFinished.addEventListener('click', () => { if (currentTab !== 'finished') setActiveTab('finished'); });
+tabProcess.addEventListener('click',  () => { if (currentTab !== 'process')  setActiveTab('process'); });
+
+thumbsEl.addEventListener('click', e => {
+  const th = e.target.closest('.gallery-thumb');
+  if (th) renderItem(parseInt(th.dataset.idx));
+});
+
+projectsGrid.addEventListener('click', e => {
+  const card = e.target.closest('.project-card');
+  if (card) openProject(card.dataset.key, parseInt(card.dataset.pidx), 'finished');
+});
+projectsGrid.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    const card = e.target.closest('.project-card');
+    if (card) openProject(card.dataset.key, parseInt(card.dataset.pidx), 'finished');
+  }
+});
+
+galleryStage.addEventListener('click', e => {
+  if (e.target.closest('.gallery-nav')) return;
+  if (currentProject !== null) openZoom();
+});
+
+zoomClose.addEventListener('click', closeZoom);
+zoomOverlay.addEventListener('click', e => { if (e.target === zoomOverlay) closeZoom(); });
+
+document.addEventListener('keydown', e => {
+  if (zoomOverlay.classList.contains('open')) { if (e.key === 'Escape') { closeZoom(); return; } }
+  if (!modal.classList.contains('open')) return;
+  if (e.key === 'Escape') { closeModal(); return; }
+  if (viewPhotos.classList.contains('active')) {
+    if (e.key === 'ArrowRight') renderItem(currentIdx + 1);
+    if (e.key === 'ArrowLeft')  renderItem(currentIdx - 1);
+  }
+});
+
+modal.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+modal.addEventListener('touchend', e => {
+  if (!viewPhotos.classList.contains('active')) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(dx) > 50) dx < 0 ? renderItem(currentIdx + 1) : renderItem(currentIdx - 1);
+}, { passive: true });
+
+/* ─── Attach gallery open to all [data-gallery] elements ─── */
+document.querySelectorAll('[data-gallery]').forEach(el => {
+  el.style.cursor = 'pointer';
+  el.addEventListener('click', () => {
+    const key  = el.dataset.gallery;
+    const pidx = el.dataset.pidx;
+    /* portfolio-items have data-pidx → open that project directly */
+    if (pidx !== undefined) {
+      openProject(key, parseInt(pidx, 10), 'finished');
+    } else {
+      openCategory(key);
+    }
+  });
+});
+
+/* ─── Inject single static photo into service-cards (all except Інше) and portfolio-items ─── */
+(function injectStaticPhotos() {
+  /* service-cards — thumbnail quality, first project's first thumb */
+  document.querySelectorAll('.service-card[data-gallery]').forEach(card => {
+    const key = card.dataset.gallery;
+    if (key === 'Інше') return; /* handled by slideshow below */
+    const data = GALLERY[key];
+    if (!data) return;
+    const proj = data.projects[0];
+    if (!proj) return;
+    const src = (proj.finished && proj.finished[0]) ? (proj.finished[0].thumb || proj.finished[0].src) : null;
+    if (!src) return;
+    const bg = card.querySelector('.service-card-bg');
+    if (!bg) return;
+    bg.style.background = 'none';
+    bg.innerHTML = `<img class="cover-slide active" src="${src}" alt="" loading="lazy"
+                        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+  });
+
+  /* portfolio-items — full-size quality.
+     data-photo="N"  → pick proj.finished[N]  (optional, default 0)
+     data-pidx="N"   → pick projects[N]        (already used for click-open)  */
+  document.querySelectorAll('.portfolio-item[data-gallery]').forEach(item => {
+    const key      = item.dataset.gallery;
+    const data     = GALLERY[key];
+    if (!data) return;
+    const pIdx     = parseInt(item.dataset.pidx  || '0', 10);
+    const photoIdx = parseInt(item.dataset.photo || '0', 10);
+    const proj     = data.projects[pIdx];
+    if (!proj) return;
+    const photo    = proj.finished && proj.finished[photoIdx];
+    const src      = photo ? photo.src : null;
+    if (!src) return;
+    const bg = item.querySelector('.portfolio-img-bg');
+    if (!bg) return;
+    bg.style.background = 'none';
+    bg.innerHTML = `<img class="cover-slide active" src="${src}" alt="" loading="lazy"
+                        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+    /* Inherit label from photo caption, fall back to project title */
+    const label = item.querySelector('.portfolio-label');
+    if (label && (photo.caption || proj.title)) {
+      label.textContent = photo.caption || proj.title;
+    }
+  });
+})();
+
+/* ─── Slideshow for service-card "Інше" only ─── */
+/* Uses cover_sources from projects that have them (named "1_…") */
+(function initInsheSlideshows() {
+  const card = document.querySelector('.service-card[data-gallery="Інше"]');
+  if (!card) return;
+  const data = GALLERY['Інше'];
+  if (!data) return;
+
+  /* Collect the first cover_source from every project that has cover_sources */
+  const slides = data.projects
+    .filter(p => p.cover_sources && p.cover_sources.length > 0)
+    .map(p => p.cover_sources[0]);
+  if (!slides.length) return;
+
+  const bg = card.querySelector('.service-card-bg');
+  if (!bg) return;
+  bg.style.background = 'none';
+  bg.innerHTML = slides.map((src, i) =>
+    `<img class="cover-slide${i === 0 ? ' active' : ''}" src="${src}" alt="" loading="lazy"
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`
+  ).join('');
+
+  if (slides.length < 2) return;
+  let idx = 0;
+  setInterval(() => {
+    bg.querySelectorAll('.cover-slide')[idx].classList.remove('active');
+    idx = (idx + 1) % slides.length;
+    bg.querySelectorAll('.cover-slide')[idx].classList.add('active');
+  }, 4000);
+})();
+
+/* ─── Dynamic justified collage ───────────────────────────────
+   Loads each portfolio photo to measure its natural aspect ratio,
+   then groups photos into flex-rows where every image occupies its
+   true aspect ratio (zero distortion) and rows fill container width.
+   Rebuilds automatically on container resize via ResizeObserver.
+   ─────────────────────────────────────────────────────────────── */
+(function buildDynamicCollage() {
+  const collageEl = document.getElementById('portfolioCollage');
+  if (!collageEl) return;
+
+  const itemEls = [...collageEl.querySelectorAll('.portfolio-item[data-gallery]')];
+  if (!itemEls.length) return;
+
+  /* Collect src for each portfolio item */
+  const entries = itemEls.map(item => {
+    const key      = item.dataset.gallery;
+    const data     = GALLERY && GALLERY[key];
+    const pIdx     = parseInt(item.dataset.pidx  || '0', 10);
+    const photoIdx = parseInt(item.dataset.photo || '0', 10);
+    const proj     = data && data.projects[pIdx];
+    const photo    = proj && proj.finished && proj.finished[photoIdx];
+    return { item, src: photo ? photo.src : null, ratio: 4 / 3 };
+  });
+
+  /* Load images to get natural aspect ratios */
+  let pending = entries.length;
+  function onAllLoaded() {
+    applyLayout();
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(applyLayout).observe(collageEl);
+    } else {
+      window.addEventListener('resize', applyLayout, { passive: true });
+    }
+  }
+
+  entries.forEach(entry => {
+    if (!entry.src) { if (--pending === 0) onAllLoaded(); return; }
+    const img   = new Image();
+    img.onload  = () => { entry.ratio = img.naturalWidth / img.naturalHeight; if (--pending === 0) onAllLoaded(); };
+    img.onerror = () => {                                                       if (--pending === 0) onAllLoaded(); };
+    img.src = entry.src;
+  });
+
+  /* ── Justified-layout core ──────────────────────────────────
+     At a given TARGET_ROW_H, photos are added to a row left→right
+     at their natural ratio. When the row's accumulated width would
+     exceed containerW we seal the row and scale its height so it
+     fills the container exactly → no distortion, tight layout.
+  ─────────────────────────────────────────────────────────── */
+  function applyLayout() {
+    const GAP          = 3;
+    const MIN_ROW_H    = 150;
+    const MAX_ROW_H    = 460;
+    const TARGET_ROW_H = 240;
+    const MAX_PER_ROW  = 4;
+    const containerW   = collageEl.clientWidth;
+    if (!containerW) return;
+
+    const ratios = entries.map(e => e.ratio);
+    const rows   = [];
+    let i = 0;
+
+    while (i < ratios.length) {
+      let rowIdxs = [];
+      let rowW    = 0;
+      let j       = i;
+
+      while (j < ratios.length && rowIdxs.length < MAX_PER_ROW) {
+        const gap  = rowIdxs.length > 0 ? GAP : 0;
+        rowIdxs.push(j);
+        rowW += ratios[j] * TARGET_ROW_H + gap;
+        j++;
+        if (rowW >= containerW && rowIdxs.length >= 2) break;
+      }
+
+      const ratioSum = rowIdxs.reduce((s, k) => s + ratios[k], 0);
+      const gapSum   = (rowIdxs.length - 1) * GAP;
+      const rowH     = Math.round(
+        Math.max(MIN_ROW_H, Math.min(MAX_ROW_H, (containerW - gapSum) / ratioSum))
+      );
+
+      rows.push({ indices: rowIdxs, height: rowH });
+      i = j;
+    }
+
+    /* Detach items (keeps all event listeners) */
+    entries.forEach(e => { if (e.item.parentNode) e.item.parentNode.removeChild(e.item); });
+    collageEl.querySelectorAll('.portfolio-row').forEach(r => r.remove());
+
+    rows.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'portfolio-row';
+      rowEl.style.height = row.height + 'px';
+
+      row.indices.forEach(k => {
+        const item  = entries[k].item;
+        /* flex-grow ∝ aspect ratio → item gets exactly ratio×height px wide */
+        item.style.flex      = entries[k].ratio + ' 0 0px';
+        item.style.height    = '100%';
+        item.style.setProperty('--item-h', row.height + 'px');
+        rowEl.appendChild(item);
+      });
+
+      collageEl.appendChild(rowEl);
+    });
+  }
+})();
+
+/* ─── Active nav highlight on scroll ─── */
+const navLinks = document.querySelectorAll('.nav-links a');
+const secObs   = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+    }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('section[id]').forEach(s => secObs.observe(s));
+
+</script>
+</body>
+</html>
