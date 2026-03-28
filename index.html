@@ -77,7 +77,7 @@ nav.scrolled{background:rgba(8,8,8,.92);backdrop-filter:blur(20px);border-bottom
 }
 
 .hero-ghost{position:absolute;right:-.05em;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-size:clamp(200px,28vw,420px);line-height:1;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.04);user-select:none;pointer-events:none;letter-spacing:-.02em}
-.hero-content{position:relative;z-index:2;max-width:820px}
+.hero-content{position:relative;z-index:2;max-width:820px;width:100%}
 .hero-label{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-condensed);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--orange);margin-bottom:2rem;opacity:0;transform:translateY(16px);animation:fadeUp .8s var(--ease-out) .3s forwards}
 .hero-label::before{content:'';width:30px;height:1px;background:var(--orange)}
 .hero-h1{font-family:var(--font-display);font-size:clamp(52px,9vw,80px);line-height:1.05;letter-spacing:.02em;text-transform:uppercase;color:var(--white);margin-bottom:0}
@@ -96,7 +96,7 @@ nav.scrolled{background:rgba(8,8,8,.92);backdrop-filter:blur(20px);border-bottom
 /* All initial states — JS takes over immediately at WELD_DELAY */
 .weld-path{fill:none;stroke:var(--orange);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px var(--orange)) drop-shadow(0 0 10px rgba(232,93,4,.5));opacity:0}
 .weld-glow{fill:none;stroke:var(--orange);stroke-width:7;stroke-linecap:round;filter:blur(3px);opacity:0}
-.spark-head{fill:var(--spark);filter:drop-shadow(0 0 5px var(--spark)) drop-shadow(0 0 12px var(--orange-2));opacity:0}
+.spark-head{fill:var(--spark);filter:drop-shadow(0 0 5px var(--spark)) drop-shadow(0 0 12px var(--orange-2))}
 
 .btn-primary{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--orange);color:var(--black);font-family:var(--font-condensed);font-weight:700;font-size:1rem;letter-spacing:.12em;text-transform:uppercase;border:none;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s var(--ease-out),box-shadow .3s}
 .btn-primary::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:translateX(-100%);transition:transform .5s}
@@ -106,16 +106,20 @@ nav.scrolled{background:rgba(8,8,8,.92);backdrop-filter:blur(20px);border-bottom
 .btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
 .hero-scroll {
   position: absolute;
-  bottom: 2.5rem;
+  bottom: 1rem;
   left: 50%;
-  transform: translateX(-50%);
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
   opacity: 0;
-  animation: fadeUp .8s var(--ease-out) 1.8s forwards;
+  animation: heroScrollIn .8s var(--ease-out) 1.8s forwards;
+}
+
+@keyframes heroScrollIn {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
 }
 
 .hero-scroll span {
@@ -199,8 +203,8 @@ section{padding:clamp(80px,12vh,140px) clamp(20px,6vw,120px)}
 .usp-example-item:hover{padding-left:8px}
 .usp-example-num{font-family:var(--font-display);font-size:2rem;color:rgba(232,93,4,.2);width:50px;flex-shrink:0}
 .usp-example-text{font-family:var(--font-condensed);font-size:1.05rem;letter-spacing:.05em;text-transform:uppercase;color:var(--light)}
-.usp-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
-.stat-card{background:var(--dark-2);border:1px solid rgba(255,255,255,.04);padding:clamp(24px,3vw,40px);position:relative;overflow:hidden;transition:border-color .3s}
+.usp-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;align-items:stretch}
+.stat-card{background:var(--dark-2);border:1px solid rgba(255,255,255,.04);padding:clamp(24px,3vw,40px);position:relative;overflow:hidden;transition:border-color .3s;display:flex;flex-direction:column;justify-content:flex-end;min-height:160px}
 .stat-card:hover{border-color:rgba(232,93,4,.3)}
 .stat-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:0;background:var(--orange);transition:height .4s var(--ease-out)}
 .stat-card:hover::before{height:100%}
@@ -325,7 +329,7 @@ section{padding:clamp(80px,12vh,140px) clamp(20px,6vw,120px)}
    ============================================================ */
 .about-section{background:var(--dark);overflow:hidden}
 .about-layout{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,6vw,80px);align-items:center}
-.about-quote{font-family:var(--font-display);font-size:clamp(1.4rem,2.5vw,2.2rem);line-height:1.2;color:var(--white);text-transform:uppercase;margin:1.5rem 0;padding-left:20px;border-left:3px solid var(--orange)}
+.about-quote{font-family:var(--font-display);font-size:clamp(2.8rem,4vw,4.2rem);line-height:1.15;color:var(--white);text-transform:uppercase;margin:1.5rem 0;padding-left:20px;border-left:3px solid var(--orange)}
 .about-text{font-size:1rem;color:var(--silver);line-height:1.8;margin-bottom:1.5rem}
 .about-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:2rem}
 .badge{font-family:var(--font-condensed);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--light);border:1px solid rgba(255,255,255,.1);padding:8px 14px;transition:border-color .2s,color .2s}
@@ -341,7 +345,7 @@ section{padding:clamp(80px,12vh,140px) clamp(20px,6vw,120px)}
 .contact-headline span{color:var(--orange)}
 .contact-sub{font-size:1.1rem;color:var(--silver);margin:0 auto 3.5rem;max-width:500px;line-height:1.7}
 .contact-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:4rem}
-.btn-whatsapp,.btn-telegram{display:inline-flex;align-items:center;gap:12px;padding:18px 36px;color:#fff;font-family:var(--font-condensed);font-weight:700;font-size:1rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s}
+.btn-whatsapp,.btn-telegram{display:inline-flex;align-items:center;gap:12px;padding:18px 36px;color:#fff;font-family:var(--font-condensed);font-weight:700;font-size:1rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:transform .2s,box-shadow .2s;min-width:220px;width:220px;justify-content:center;box-sizing:border-box}
 .btn-whatsapp{background:#25D366}
 .btn-whatsapp:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(37,211,102,.3)}
 .btn-telegram{background:#0088cc}
@@ -382,6 +386,10 @@ section{padding:clamp(80px,12vh,140px) clamp(20px,6vw,120px)}
   cursor:pointer;
   transition:transform .2s,box-shadow .2s;
   background:#0084ff;
+  min-width:220px;
+  width:220px;
+  justify-content:center;
+  box-sizing:border-box;
 }
 
 .btn-messenger:hover{
@@ -535,6 +543,28 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* ── Portfolio label above services-grid ── */
+.services-portfolio-label{padding:2.5rem 0 1rem}
+
+/* ── Hide portfolio section on mobile ── */
+@media(max-width:770px){
+  .portfolio-section{display:none !important}
+}
+
+/* ============================================================
+   900px — burger appears
+   ============================================================ */
+@media(max-width:900px){
+  nav{height:60px;padding:0 20px}
+  .nav-logo{font-size:1.3rem}
+  .nav-links,.nav-cta{display:none}
+  .nav-burger{display:flex}
+  .nav-burger span{transition:transform .3s var(--ease-out),opacity .25s,background .2s}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+}
+
 /* ============================================================
    1024px — tablet
    ============================================================ */
@@ -546,6 +576,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   .process-steps{grid-template-columns:1fr 1fr;gap:2.5rem}
   .process-steps::before{display:none}
   .section-title{font-size:clamp(32px,5.5vw,60px)}
+  .about-quote{font-size:clamp(2rem,3.5vw,3.2rem)}
 }
 
 /* ============================================================
@@ -553,17 +584,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
    ============================================================ */
 @media(max-width:768px){
 
-  /* ── Nav ── */
-  nav{height:60px;padding:0 20px}
-  .nav-logo{font-size:1.3rem}
-  .nav-links,.nav-cta{display:none}
-  .nav-burger{display:flex}
-  .nav-burger span{transition:transform .3s var(--ease-out),opacity .25s,background .2s}
-  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-  .nav-burger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-
-  /* ── Mobile menu font ── */
+  /* ── Mobile menu ── */
   .mobile-menu{gap:2rem}
   .mobile-menu a{font-size:clamp(1.8rem,7vw,2.8rem);letter-spacing:.04em}
 
@@ -576,16 +597,29 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   .section-sub{font-size:.95rem;line-height:1.7}
 
   /* ── Hero ── */
-  .hero{min-height:100svh;padding:80px 20px 76px;align-items:flex-start}
+  .hero{
+    min-height:100svh;
+    padding:76px 20px 100px; /* bottom padding keeps space for scroll-arrow */
+    align-items:flex-start;
+    box-sizing:border-box;
+  }
   .hero-ghost{display:none}
   .hero-label{font-size:.7rem;letter-spacing:.16em;margin-bottom:1.2rem}
-  .hero-h1{font-size:clamp(40px,10.5vw,58px)}
-  .hero-sub{font-size:.95rem;line-height:1.7;margin-bottom:1.8rem;max-width:100%}
-  .hero-ctas{flex-direction:column;align-items:stretch;gap:.7rem}
-  .btn-primary{width:100%;justify-content:center;padding:15px 20px;font-size:.95rem}
-  .btn-ghost{width:100%;justify-content:center;padding:14px 20px;font-size:.95rem}
-  .weld-container{margin:.3rem 0 1rem}
-  .hero-scroll{bottom:1.5rem}
+  /* H1: tight clamp so "Металоконструкції" never wraps or overflows */
+  .hero-h1{font-size:clamp(34px,8.5vw,52px);line-height:1.04;word-break:break-word;overflow-wrap:break-word}
+  .hero-sub{font-size:.93rem;line-height:1.68;margin-bottom:1.6rem;max-width:100%}
+  /* Buttons: stack vertically, full width, no overflow */
+  .hero-ctas{flex-direction:column;align-items:stretch;gap:.65rem;width:100%}
+  .btn-primary,.btn-ghost{
+    width:100%;box-sizing:border-box;
+    justify-content:center;
+    padding:14px 18px;
+    font-size:.92rem;letter-spacing:.09em;
+  }
+  /* Weld line: limit to ~70% so it feels balanced under the headline */
+  .weld-container{margin:.3rem 0 1rem;max-width:70%}
+  /* Scroll arrow: always at bottom, never overlaps content */
+  .hero-scroll{bottom:.5rem}
 
   /* ── Ticker ── */
   .ticker-track span{font-size:.88rem;padding:0 1.6rem}
@@ -612,22 +646,36 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   /* ── Portfolio ── */
   .portfolio-layout{flex-direction:column;gap:2rem}
   .portfolio-text{width:100%}
+  /* Portfolio label always visible on touch */
   .portfolio-label{opacity:.9;transform:none;font-size:.85rem !important}
   .portfolio-tag{opacity:.9;transform:none;font-size:.65rem}
 
-  /* ── Process ── */
-  .process-steps{grid-template-columns:1fr;gap:2rem;margin-top:3rem}
-  .process-dot{width:52px;height:52px;font-size:1.2rem;margin-bottom:1rem}
-  .process-step-title{font-size:.9rem;letter-spacing:.06em}
+  /* ── Process: horizontal row, dot vertically centred vs text block ── */
+  .process-steps{grid-template-columns:1fr;gap:0;margin-top:3rem}
+  .process-step{
+    display:flex;flex-direction:row;
+    align-items:center; /* dot centred vertically to text block */
+    gap:1.4rem;
+    text-align:left;
+    padding:1.4rem 0;
+    border-bottom:1px solid rgba(255,255,255,.05);
+  }
+  .process-step:last-child{border-bottom:none}
+  .process-steps::before{display:none}
+  .process-dot{
+    flex-shrink:0;
+    width:52px;height:52px;font-size:1.2rem;
+    margin:0; /* overrides base margin:0 auto 2rem */
+    align-self:center;
+  }
+  .process-step-body{display:flex;flex-direction:column;gap:4px}
+  .process-step-title{font-size:.9rem;letter-spacing:.06em;margin-bottom:0}
   .process-step-desc{font-size:.85rem}
-  .process-step{align-items:flex-start;text-align:left;flex-direction:row;gap:1.2rem;padding:0 0 1.5rem;border-bottom:1px solid rgba(255,255,255,.05)}
-  .process-step:last-child{border-bottom:none;padding-bottom:0}
-  .process-dot{flex-shrink:0;margin:0}
 
   /* ── About ── */
   .about-layout{gap:2rem}
   .about-layout iframe{height:240px !important}
-  .about-quote{font-size:clamp(1.15rem,4vw,1.6rem);padding-left:14px}
+  .about-quote{font-size:clamp(1.9rem,5vw,2.8rem);padding-left:14px;line-height:1.15}
   .about-text{font-size:.93rem;line-height:1.75}
   .badge{font-size:.72rem;padding:7px 12px}
 
@@ -660,6 +708,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   footer{flex-direction:column;text-align:center;padding:2rem 20px;gap:.8rem}
   .footer-logo{font-size:1.2rem}
   .footer-copy{font-size:.72rem;letter-spacing:.08em}
+  .footer-rights{display:none} /* hide "· Усі права захищені" on mobile */
   .footer-links{justify-content:center;flex-wrap:wrap;gap:1rem}
   .footer-links a{font-size:.72rem}
 }
@@ -678,10 +727,13 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   .section-sub{font-size:.9rem}
 
   /* ── Hero ── */
-  .hero{padding:72px 16px 68px}
-  .hero-label{font-size:.65rem;letter-spacing:.13em}
-  .hero-h1{font-size:clamp(36px,11vw,50px)}
-  .hero-sub{font-size:.9rem}
+  .hero{padding:68px 16px 96px}
+  .hero-label{font-size:.64rem;letter-spacing:.12em}
+  /* Even tighter clamp: "Металоконструкції" at 31px (~18px/char Oswald) = ~288px < 343px safe */
+  .hero-h1{font-size:clamp(30px,8vw,44px)}
+  .hero-sub{font-size:.88rem}
+  /* Weld line proportional to narrower screen */
+  .weld-container{max-width:80%}
 
   /* ── Services ── */
   .services-grid{grid-template-columns:1fr}
@@ -695,20 +747,18 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
   .stat-number{font-size:clamp(2.2rem,9vw,3rem)}
   .stat-label{font-size:.7rem;letter-spacing:.08em}
 
-  /* ── Portfolio collage → stack vertically ── */
-  .portfolio-collage .portfolio-row{height:auto !important;flex-wrap:wrap}
-  .portfolio-item{flex:none !important;width:100% !important;height:190px !important}
-  .portfolio-label{font-size:.8rem !important}
+  /* ── Portfolio collage → simple 2-col grid handled in JS ── */
+  .portfolio-collage{overflow:hidden}
 
   /* ── Process ── */
-  .process-steps{margin-top:2rem}
-  .process-dot{width:46px;height:46px;font-size:1.1rem}
-  .process-step-title{font-size:.85rem}
+  .process-dot{width:46px;height:46px;font-size:1.05rem}
+  .process-step-title{font-size:.84rem}
   .process-step-desc{font-size:.82rem}
+  .process-step{gap:1rem;padding:1.2rem 0}
 
   /* ── About ── */
   .about-layout iframe{height:200px !important}
-  .about-quote{font-size:clamp(1rem,4.5vw,1.3rem)}
+  .about-quote{font-size:clamp(1.6rem,5.5vw,2.4rem)}
   .about-badges{gap:6px;margin-top:1.2rem}
   .badge{font-size:.68rem;padding:6px 10px}
 
@@ -806,8 +856,11 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
         <!-- Main seam: revealed left→right via JS-controlled dashoffset -->
         <path class="weld-path"
           d="M0,4 Q40,1 80,5 T160,4 T240,3 T320,5 T400,4 T480,3 T560,5 T640,4 T720,3 T800,4"/>
-        <!-- Spark head: positioned at getPointAtLength(drawn), pure JS -->
-        <circle class="spark-head" r="4.5" cx="-20" cy="4"/>
+      </svg>
+      <!-- Spark head in its own square SVG to avoid distortion from preserveAspectRatio="none" -->
+      <svg id="sparkHeadSvg" viewBox="-10 -10 20 20" xmlns="http://www.w3.org/2000/svg"
+           style="position:absolute;top:50%;left:0;transform:translate(-50%,-50%);width:20px;height:20px;overflow:visible;pointer-events:none;opacity:0">
+        <circle class="spark-head" r="4.5" cx="0" cy="0"/>
       </svg>
     </div>
 
@@ -860,6 +913,9 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
     <div class="section-label">Що Я Будую</div>
     <h2 class="section-title">Металеві<br>Конструкції</h2>
     <p class="section-sub">Від функціональних до архітектурних — кожен проєкт виконується за специфікацією у моїй власній майстерні.</p>
+  </div>
+  <div class="services-portfolio-label reveal">
+    <div class="section-label" style="margin-bottom:0">Портфоліо</div>
   </div>
   <div class="services-grid">
 
@@ -1004,11 +1060,11 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
     <h2 class="section-title" style="font-size:clamp(36px,5vw,66px)">Від Ідеї<br>До Металу</h2>
   </div>
   <div class="process-steps">
-    <div class="process-step reveal"><div class="process-dot">01</div><div class="process-step-title">Обговорення</div><div class="process-step-desc">Зателефонуйте, напишіть або принесіть ескіз. Я слухаю і задаю правильні питання.</div></div>
-    <div class="process-step reveal reveal-delay-1"><div class="process-dot">02</div><div class="process-step-title">Оцінка</div><div class="process-step-desc">Прозора розбивка вартості. Жодних прихованих платежів. Ціна підтверджується до початку робіт.</div></div>
-    <div class="process-step reveal reveal-delay-2"><div class="process-dot">03</div><div class="process-step-title">Проєктування</div><div class="process-step-desc">Технічне креслення. 3D моделювання. Точні виміри. Вибір матеріалів узгоджується з вами.</div></div>
-    <div class="process-step reveal reveal-delay-3"><div class="process-dot">04</div><div class="process-step-title">Виготовлення</div><div class="process-step-desc">Виготовляється у моїй власній майстерні. Ви можете відвідати, перевірити прогрес, задати питання.</div></div>
-    <div class="process-step reveal reveal-delay-4"><div class="process-dot">05</div><div class="process-step-title">Доставка</div><div class="process-step-desc">Доставка та монтаж. Готовий виріб перевіряємо разом.</div></div>
+    <div class="process-step reveal"><div class="process-dot">01</div><div class="process-step-body"><div class="process-step-title">Обговорення</div><div class="process-step-desc">Зателефонуйте, напишіть або принесіть ескіз. Я слухаю і задаю правильні питання.</div></div></div>
+    <div class="process-step reveal reveal-delay-1"><div class="process-dot">02</div><div class="process-step-body"><div class="process-step-title">Оцінка</div><div class="process-step-desc">Прозора розбивка вартості. Жодних прихованих платежів. Ціна підтверджується до початку робіт.</div></div></div>
+    <div class="process-step reveal reveal-delay-2"><div class="process-dot">03</div><div class="process-step-body"><div class="process-step-title">Проєктування</div><div class="process-step-desc">Технічне креслення. 3D моделювання. Точні виміри. Вибір матеріалів узгоджується з вами.</div></div></div>
+    <div class="process-step reveal reveal-delay-3"><div class="process-dot">04</div><div class="process-step-body"><div class="process-step-title">Виготовлення</div><div class="process-step-desc">Виготовляється у моїй власній майстерні. Ви можете відвідати, перевірити прогрес, задати питання.</div></div></div>
+    <div class="process-step reveal reveal-delay-4"><div class="process-dot">05</div><div class="process-step-body"><div class="process-step-title">Доставка</div><div class="process-step-desc">Доставка та монтаж. Готовий виріб перевіряємо разом.</div></div></div>
   </div>
 </section>
 
@@ -1080,7 +1136,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05);padding
 
 <footer>
   <div class="footer-logo">STEEL<span>&</span>FIRE</div>
-  <p class="footer-copy">© 2026 · Виготовлення металоконструкцій на замовлення · Усі права захищені</p>
+  <p class="footer-copy">© 2026 · Виготовлення металоконструкцій на замовлення<span class="footer-rights"> · Усі права захищені</span></p>
   <ul class="footer-links">
     <li><a href="#services">Послуги</a></li>
     <li><a href="#portfolio">Портфоліо</a></li>
@@ -1239,12 +1295,14 @@ document.querySelectorAll('.portfolio-item').forEach(item => {
    ───────────────────────────────────────────────────────────── */
 const weldPathEl   = document.querySelector('.weld-path');
 const weldGlowEl   = document.querySelector('.weld-glow');
-const sparkHeadEl  = document.querySelector('.spark-head');
+const sparkHeadEl  = document.querySelector('.spark-head');   /* circle inside sparkHeadSvg */
+const sparkHeadSvg = document.getElementById('sparkHeadSvg');
 const sparksCanvas = document.getElementById('sparksCanvas');
 const ctx          = sparksCanvas.getContext('2d');
 
 const WELD_DELAY     = 2500;
 const WELD_DURATION  = 2500;
+const SOUND_DELAY    = 500;   /* ms after weld starts before sound plays */
 const CANVAS_SIZE    = 260; // CSS pixels
 const DPR            = Math.max(1, window.devicePixelRatio || 1);
 
@@ -1283,7 +1341,7 @@ function initWeld() {
       p.style.strokeDashoffset = pathLen;
     });
 
-    sparkHeadEl.style.opacity = '0';
+    sparkHeadSvg.style.opacity = '0';
     resizeCanvas();
 
     setTimeout(() => {
@@ -1293,6 +1351,7 @@ function initWeld() {
       weldActive = true;
       requestAnimationFrame(tickWeld);
       if (!canvasRAF) canvasRAF = requestAnimationFrame(animateSparks);
+
     }, WELD_DELAY);
   });
 }
@@ -1312,9 +1371,10 @@ function tickWeld(now) {
   weldGlowEl.style.opacity = (0.20 + Math.random() * 0.22).toString();
 
   const pt = weldPathEl.getPointAtLength(Math.max(0, drawn));
-  sparkHeadEl.setAttribute('cx', pt.x);
-  sparkHeadEl.setAttribute('cy', pt.y);
-  sparkHeadEl.style.opacity = t > 0.005 ? '1' : '0';
+
+  /* Position spark-head SVG as % of container width (avoids preserveAspectRatio distortion) */
+  sparkHeadSvg.style.left    = (pt.x / 800 * 100) + '%';
+  sparkHeadSvg.style.opacity = t > 0.005 ? '1' : '0';
 
   const svgRect   = weldPathEl.closest('svg').getBoundingClientRect();
   const heroRect  = sparksCanvas.parentElement.getBoundingClientRect();
@@ -1327,7 +1387,7 @@ function tickWeld(now) {
   if (t < 1) {
     requestAnimationFrame(tickWeld);
   } else {
-    sparkHeadEl.style.opacity = '0';
+    sparkHeadSvg.style.opacity  = '0';
     weldPathEl.style.opacity   = '1';
     weldGlowEl.style.opacity   = '0.3';
     weldActive = false;
@@ -1986,6 +2046,20 @@ document.querySelectorAll('[data-gallery]').forEach(el => {
   });
 });
 
+/* ─── Auto-count projects in service-card-view labels ─── */
+(function updateServiceCardCounts() {
+  document.querySelectorAll('.service-card[data-gallery]').forEach(card => {
+    const key  = card.dataset.gallery;
+    const data = GALLERY && GALLERY[key];
+    if (!data) return;
+    const count = data.projects.length;
+    const viewEl = card.querySelector('.service-card-view');
+    if (viewEl) {
+      viewEl.textContent = `Переглянути ${count} проєкт${count === 1 ? '' : count < 5 ? 'и' : 'ів'} ↗`;
+    }
+  });
+})();
+
 /* ─── Inject single static photo into service-cards (all except Інше) and portfolio-items ─── */
 (function injectStaticPhotos() {
   /* service-cards — thumbnail quality, first project's first thumb */
@@ -2121,6 +2195,31 @@ document.querySelectorAll('[data-gallery]').forEach(el => {
     const containerW   = collageEl.clientWidth;
     if (!containerW) return;
 
+    /* ── Detach items (preserves event listeners) ── */
+    entries.forEach(e => { if (e.item.parentNode) e.item.parentNode.removeChild(e.item); });
+    collageEl.querySelectorAll('.portfolio-row').forEach(r => r.remove());
+
+    /* ── MOBILE: simple N-column grid with fixed-height tiles ── */
+    if (containerW < 600) {
+      const cols   = containerW < 360 ? 1 : 2;
+      const tileH  = Math.round((containerW - GAP * (cols - 1)) / cols * 0.72);
+
+      for (let i = 0; i < entries.length; i += cols) {
+        const rowEl = document.createElement('div');
+        rowEl.className  = 'portfolio-row';
+        rowEl.style.cssText = `height:${tileH}px;`;
+
+        for (let j = i; j < Math.min(i + cols, entries.length); j++) {
+          const item = entries[j].item;
+          item.style.cssText = `flex:1 0 0px; height:100%; --item-h:${tileH}px;`;
+          rowEl.appendChild(item);
+        }
+        collageEl.appendChild(rowEl);
+      }
+      return;
+    }
+
+    /* ── DESKTOP: original justified layout ── */
     const ratios = entries.map(e => e.ratio);
     const rows   = [];
     let i = 0;
@@ -2148,10 +2247,6 @@ document.querySelectorAll('[data-gallery]').forEach(el => {
       i = j;
     }
 
-    /* Detach items (keeps all event listeners) */
-    entries.forEach(e => { if (e.item.parentNode) e.item.parentNode.removeChild(e.item); });
-    collageEl.querySelectorAll('.portfolio-row').forEach(r => r.remove());
-
     rows.forEach(row => {
       const rowEl = document.createElement('div');
       rowEl.className = 'portfolio-row';
@@ -2159,7 +2254,6 @@ document.querySelectorAll('[data-gallery]').forEach(el => {
 
       row.indices.forEach(k => {
         const item  = entries[k].item;
-        /* flex-grow ∝ aspect ratio → item gets exactly ratio×height px wide */
         item.style.flex      = entries[k].ratio + ' 0 0px';
         item.style.height    = '100%';
         item.style.setProperty('--item-h', row.height + 'px');
