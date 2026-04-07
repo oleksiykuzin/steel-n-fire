@@ -1,3 +1,12 @@
+/* ─────────────────────────────────────────────────────────────
+ *  MOBILE MENU
+ *  ───────────────────────────────────────────────────────────── */
+function toggleMenu() {
+  const m = document.getElementById('mobMenu');
+  m.classList.toggle('open');
+  document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
+}
+
 /* ============================================================
    NAV SCROLL
    ============================================================ */

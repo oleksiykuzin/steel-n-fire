@@ -1,10 +1,3 @@
-/* ─── Mobile menu ─── */
-function toggleMenu() {
-  const m = document.getElementById('mobMenu');
-  m.classList.toggle('open');
-  document.body.style.overflow = m.classList.contains('open') ? 'hidden' : '';
-}
-
 /* ══════════════════════════════════════
    GALLERY — inline per-case
    ══════════════════════════════════════ */

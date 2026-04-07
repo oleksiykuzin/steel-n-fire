@@ -1,13 +1,4 @@
 /* ─────────────────────────────────────────────────────────────
-   MOBILE MENU
-   ───────────────────────────────────────────────────────────── */
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-  document.getElementById('burger').classList.toggle('open');
-  document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
-}
-
-/* ─────────────────────────────────────────────────────────────
    HERO PARALLAX
    ───────────────────────────────────────────────────────────── */
 const heroGhost = document.querySelector('.hero-ghost');
