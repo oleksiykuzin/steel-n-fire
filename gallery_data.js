@@ -767,22 +767,22 @@ const GALLERY = {
     label: "Дашки",
     projects: [
       {
-        title: "Ажурний навіс із крученою колоною",
+        title: "Ажурний дашок із крученою колоною",
         finished: [
           {
-            src: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/1.webp",
-            thumb: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/1_thumb.webp",
-            caption: "Ажурний навіс із крученою колоною"
+            src: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/1.webp",
+            thumb: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/1_thumb.webp",
+            caption: "Ажурний дашок із крученою колоною"
           },
           {
-            src: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/2.webp",
-            thumb: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/2_thumb.webp",
-            caption: "Ажурний навіс із крученою колоною"
+            src: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/2.webp",
+            thumb: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/2_thumb.webp",
+            caption: "Ажурний дашок із крученою колоною"
           },
           {
-            src: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/3.webp",
-            thumb: "assets/gallery/Дашки/1_Ажурний навіс із крученою колоною/final/3_thumb.webp",
-            caption: "Ажурний навіс із крученою колоною"
+            src: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/3.webp",
+            thumb: "assets/gallery/Дашки/1_Ажурний дашок із крученою колоною/final/3_thumb.webp",
+            caption: "Ажурний дашок із крученою колоною"
           }
         ],
         process: []
@@ -1184,29 +1184,29 @@ const GALLERY = {
         ]
       },
       {
-        title: "Консольний навіс для авто",
+        title: "Консольний навіс «Sky Arch» з монолітним полікарбонатом",
         finished: [
           {
-            src: "assets/gallery/Навіси/2_Консольний навіс для авто/final/1.webp",
-            thumb: "assets/gallery/Навіси/2_Консольний навіс для авто/final/1_thumb.webp",
-            caption: "Консольний навіс для авто"
+            src: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/1.webp",
+            thumb: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/1_thumb.webp",
+            caption: "Консольний навіс «Sky Arch» з монолітним полікарбонатом"
           },
           {
-            src: "assets/gallery/Навіси/2_Консольний навіс для авто/final/2.webp",
-            thumb: "assets/gallery/Навіси/2_Консольний навіс для авто/final/2_thumb.webp",
-            caption: "Консольний навіс для авто"
+            src: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/2.webp",
+            thumb: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/2_thumb.webp",
+            caption: "Консольний навіс «Sky Arch» з монолітним полікарбонатом"
           },
           {
-            src: "assets/gallery/Навіси/2_Консольний навіс для авто/final/3.webp",
-            thumb: "assets/gallery/Навіси/2_Консольний навіс для авто/final/3_thumb.webp",
-            caption: "Консольний навіс для авто"
+            src: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/3.webp",
+            thumb: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/final/3_thumb.webp",
+            caption: "Консольний навіс «Sky Arch» з монолітним полікарбонатом"
           }
         ],
         process: [
           {
-            src: "assets/gallery/Навіси/2_Консольний навіс для авто/progress/1.webp",
-            thumb: "assets/gallery/Навіси/2_Консольний навіс для авто/progress/1_thumb.webp",
-            caption: "Консольний навіс для авто"
+            src: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/progress/1.webp",
+            thumb: "assets/gallery/Навіси/2_Консольний навіс «Sky Arch» з монолітним полікарбонатом/progress/1_thumb.webp",
+            caption: "Консольний навіс «Sky Arch» з монолітним полікарбонатом"
           }
         ]
       },
