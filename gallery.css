@@ -1,0 +1,193 @@
+/* ============================================================
+ *  GALLERY PAGE — gallery.css
+ *  Підключається після main.css та poslugy.css
+ *  ============================================================ */
+
+/* ── Disclaimer banner ── */
+.gallery-disclaimer {
+    background: rgba(232,93,4,.06);
+    border-left: 3px solid var(--orange);
+    border-bottom: 1px solid rgba(232,93,4,.12);
+    padding: 14px clamp(20px,6vw,120px);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.gallery-disclaimer-icon {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border: 1px solid rgba(232,93,4,.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .65rem;
+    color: var(--orange);
+    font-family: var(--font-condensed);
+    font-weight: 700;
+}
+.gallery-disclaimer-text {
+    font-family: var(--font-condensed);
+    font-size: .74rem;
+    letter-spacing: .06em;
+    color: var(--silver);
+    line-height: 1.5;
+}
+.gallery-disclaimer-text em {
+    color: var(--light);
+    font-style: normal;
+}
+
+/* ── Category anchor nav ── */
+.cat-nav {
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    background: rgba(8,8,8,.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    padding: 0 clamp(20px,6vw,120px);
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.cat-nav::-webkit-scrollbar { display: none; }
+.cat-nav-item {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-family: var(--font-condensed);
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--metal);
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.cat-nav-item:hover { color: var(--light); border-color: rgba(255,255,255,.2); }
+.cat-nav-item.active { color: var(--orange); border-color: var(--orange); }
+.cat-nav-count {
+    font-size: .6rem;
+    background: rgba(232,93,4,.15);
+    color: var(--orange);
+    padding: 1px 6px;
+    border-radius: 20px;
+    letter-spacing: .05em;
+}
+
+/* ── Category section ── */
+.cat-section {
+    scroll-margin-top: 110px;
+}
+
+/* ── Project grid inside a category ── */
+.proj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 480px), 1fr));
+    gap: 0;
+}
+
+/* ── Project card ── */
+.proj-card {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(255,255,255,.04);
+    border-right: 1px solid rgba(255,255,255,.04);
+    background: var(--dark);
+    transition: background .3s;
+    position: relative;
+}
+/* убираем лишние правые границы в крайних колонках */
+.proj-card:nth-child(2n) { border-right: none; }
+
+.proj-card:hover { background: var(--dark-2); }
+.proj-card:hover .proj-body::before { opacity: 1; }
+
+/* ── Media part of card ── */
+.proj-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--dark-3);
+    cursor: zoom-in;
+    aspect-ratio: 4/3;
+    width: 100%;
+}
+/* reuse gallery-img, gallery-hud, etc from poslugy.css */
+
+.proj-card .gallery-img { border-radius: 0; }
+
+/* ── Card body ── */
+.proj-body {
+    padding: clamp(18px,3vw,28px) clamp(18px,3vw,28px) clamp(20px,3vw,30px);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    position: relative;
+}
+.proj-body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--orange), transparent 60%);
+    opacity: 0;
+    transition: opacity .3s;
+}
+.proj-cat-badge {
+    font-family: var(--font-condensed);
+    font-size: .62rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: rgba(232,93,4,.5);
+}
+.proj-title {
+    font-family: var(--font-display);
+    font-size: clamp(.95rem,1.5vw,1.15rem);
+    line-height: 1.2;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin: 0;
+}
+.proj-photo-count {
+    font-family: var(--font-condensed);
+    font-size: .66rem;
+    letter-spacing: .12em;
+    color: var(--metal);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 2px;
+}
+.proj-photo-count::before {
+    content: '';
+    width: 14px;
+    height: 1px;
+    background: var(--metal);
+}
+
+/* ── Category header divider (reuses section-div classes, no extra CSS needed) ── */
+
+/* ============================================================
+ *  RESPONSIVE
+ *  ============================================================ */
+@media (max-width: 760px) {
+    .proj-grid {
+        grid-template-columns: 1fr;
+    }
+    .proj-card { border-right: none; }
+    .cat-nav { top: 60px; padding: 0 14px; gap: 0; }
+    .cat-nav-item { padding: 12px 12px; font-size: .68rem; }
+    .gallery-disclaimer { padding: 12px 16px; }
+}
+
+@media (max-width: 480px) {
+    .proj-media { aspect-ratio: 3/2; }
+    .proj-body { padding: 16px; }
+    .cat-nav { top: 60px; }
+}

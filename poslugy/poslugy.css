@@ -130,6 +130,7 @@
   .cta-sub{text-align:center}
   .cta-h{font-size:clamp(4rem,4vw,3.4rem)}
   .cta-phone{font-size:clamp(3rem,9vw,4rem)}
+  .proj-media.case-media{height:auto}
 }
 
 /* ============================================================
