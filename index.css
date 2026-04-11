@@ -374,6 +374,7 @@ footer{background:var(--dark);border-top:1px solid rgba(255,255,255,.05)}
   .process-steps::before{display:none}
   .section-title{font-size:clamp(32px,5.5vw,60px)}
   .about-quote{font-size:clamp(2rem,3.5vw,3.2rem)}
+  .stat-card{justify-content:center;align-items:center;text-align:center}
 }
 
 /* ============================================================

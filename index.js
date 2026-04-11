@@ -794,3 +794,26 @@ const secObs   = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.4 });
 document.querySelectorAll('section[id]').forEach(s => secObs.observe(s));
+
+/**
+ * ==========================================
+ *  Portfolio Link Responsive Href Switcher
+ *  Changes anchor target based on viewport
+ *  breakpoint (<= 770px)
+ * ==========================================
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+  const link = document.querySelector('.btn-ghost');
+
+  if (link) {
+    const mq = window.matchMedia('(max-width: 770px)');
+
+    const updateHref = (e) => {
+      link.href = e.matches ? '#portfolioMob' : '#portfolio';
+    };
+
+    updateHref(mq);
+    mq.addEventListener('change', updateHref);
+  }
+});
