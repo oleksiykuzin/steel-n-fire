@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oleksiykuzin.github.io/steel-n-fire/sitemap.xml

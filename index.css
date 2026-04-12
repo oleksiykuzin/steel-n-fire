@@ -50,13 +50,6 @@ button,a,[role="button"],.service-card,.portfolio-item,.project-card{touch-actio
 .btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:15px 30px;border:1px solid rgba(255,255,255,.15);color:var(--light);font-family:var(--font-condensed);font-size:1rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
 .btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
 
-/* ─── Hero scroll indicator ─── */
-.hero-scroll{position:absolute;bottom:1rem;left:50%;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:heroScrollIn .8s var(--ease-out) 1.8s forwards}
-@keyframes heroScrollIn{from{opacity:0;transform:translate(-50%,16px)}to{opacity:1;transform:translate(-50%,0)}}
-.hero-scroll span{font-family:var(--font-condensed);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--metal)}
-.scroll-arrow{animation:scrollPulse 2s ease-in-out infinite}
-@keyframes scrollPulse{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(6px)}}
-
 /* ============================================================
    SECTION UTILITIES
    ============================================================ */

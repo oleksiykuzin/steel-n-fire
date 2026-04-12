@@ -11,34 +11,33 @@
 <!-- Geo meta for local search -->
 <meta name="geo.region" content="UA-71"/>
 <meta name="geo.placename" content="Черкаси"/>
-<meta name="geo.position" content="49.4285;32.0630"/>
+<meta name="geo.position" content="49.4180372942995;32.07384584568363"/>
 <meta name="ICBM" content="49.4285, 32.0630"/>
 
 <!-- Open Graph -->
-<meta property="og:type" content="website"/>
-<meta property="og:locale" content="uk_UA"/>
-<meta property="og:title" content="Металоконструкції у Черкасах — зварювальник, сходи, ворота, навіси | STEEL&amp;FIRE"/>
-<meta property="og:description" content="Виготовлення металоконструкцій у Черкасах: сходи, поручні, навіси, ворота, двері, нестандартні конструкції. Власна майстерня, заміри, розрахунок, монтаж."/>
-<meta property="og:url" content="https://oleksiykuzin.github.io/steel-n-fire/"/>
-<meta property="og:site_name" content="STEEL&amp;FIRE — Кузін Олексій Леонідович"/>
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="uk_UA" />
+<meta property="og:title" content="Металоконструкції у Черкасах — зварювальник, сходи, ворота, навіси | STEEL&FIRE" />
+<meta property="og:description" content="Виготовлення металоконструкцій у Черкасах: сходи, поручні, навіси, ворота, двері, нестандартні конструкції. Власна майстерня, заміри, розрахунок, монтаж." />
+<meta property="og:url" content="https://oleksiykuzin.github.io/steel-n-fire/" />
+<meta property="og:site_name" content="STEEL&FIRE — Кузін Олексій Леонідович" />
+<meta property="og:image" content="https://oleksiykuzin.github.io/steel-n-fire/images/og-cover.jpg" />
 
 <!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Металоконструкції у Черкасах | STEEL&amp;FIRE"/>
-<meta name="twitter:description" content="Сходи, ворота, навіси, зварювальні роботи на замовлення у Черкасах. Власна майстерня, 23 роки досвіду."/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Металоконструкції у Черкасах | STEEL&FIRE" />
+<meta name="twitter:description" content="Сходи, ворота, навіси, зварювальні роботи на замовлення у Черкасах. Власна майстерня, 23 роки досвіду." />
+<meta name="twitter:image" content="https://oleksiykuzin.github.io/steel-n-fire/images/og-cover.jpg" />
 
-<!-- Robots -->
-<meta name="robots" content="index, follow"/>
-
-<!-- LocalBusiness Structured Data -->
+<!-- HomeAndConstructionBusiness -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "STEEL&FIRE — Кузін Олексій",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "STEEL&FIRE — Кузін Олексій Леонідович",
   "description": "Виготовлення металоконструкцій на замовлення у Черкасах: сходи, поручні, навіси, ворота, двері, зварювальні роботи. Власна майстерня, 23 роки досвіду.",
   "url": "https://oleksiykuzin.github.io/steel-n-fire/",
-  "telephone": "+380635349922",
+  "telephone": ["+380635349922", "+380964206979"],
   "areaServed": "Черкаси",
   "address": {
     "@type": "PostalAddress",
@@ -50,11 +49,12 @@
   },
   "openingHoursSpecification": {
     "@type": "OpeningHoursSpecification",
-    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-    "opens": "06:00",
-    "closes": "20:00"
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "08:30",
+    "closes": "17:00"
   }
 }
+</script>
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -77,7 +77,7 @@
         <li><a href="poslugy/shody-peryla.html">Сходи та Перила</a></li>
         <li><a href="poslugy/navisy-dashky.html">Навіси та Дашки</a></li>
         <li><a href="poslugy/vorota-dveri.html">Ворота та Двері</a></li>
-        <li><a href="poslugy/loft-mebli.html">Лофт та Меблі</a></li>
+        <li><a href="poslugy/mebli.html">Меблі</a></li>
         <li><a href="poslugy/art-kovka.html">Художня Ковка</a></li>
         <li><a href="poslugy/mangaly-dekor.html">Мангали та Садовий Декор</a></li>
         <li><a href="poslugy/spec-proekty.html">Спецпроєкти</a></li>
@@ -102,7 +102,7 @@
     <a href="poslugy/shody-peryla.html" onclick="toggleMenu()">Сходи та Перила</a>
     <a href="poslugy/navisy-dashky.html" onclick="toggleMenu()">Навіси та Дашки</a>
     <a href="poslugy/vorota-dveri.html" onclick="toggleMenu()">Ворота та Двері</a>
-    <a href="poslugy/loft-mebli.html" onclick="toggleMenu()">Лофт та Меблі</a>
+    <a href="poslugy/mebli.html" onclick="toggleMenu()">Меблі</a>
     <a href="poslugy/art-kovka.html" onclick="toggleMenu()">Художня Ковка</a>
     <a href="poslugy/mangaly-dekor.html" onclick="toggleMenu()">Мангали та Садовий Декор</a>
     <a href="poslugy/spec-proekty.html" onclick="toggleMenu()">Спецпроєкти</a>
@@ -158,13 +158,6 @@
     </div>
   </div>
 
-<div class="hero-scroll">
-  <span>Вниз</span>
-  <svg class="scroll-arrow" width="20" height="54" viewBox="0 0 20 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <line x1="10" y1="0" x2="10" y2="42" stroke="var(--orange)" stroke-width="1"/>
-    <polyline points="2,34 10,46 18,34" stroke="var(--orange)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-  </svg>
-</div>
 </section>
 
 <!-- TICKER -->
@@ -202,7 +195,7 @@
   <div class="services-info-block reveal">
     <div class="services-info-col">
       <h3 class="services-info-title">Матеріали та технології</h3>
-      <p class="services-info-text">Працюю зі звичайним прокатом (труба, куток, смуга), нержавіючою сталлю, алюмінієм, чавуном і кольоровими металами. Зварювання — полуавтомат, аргон, алюміній, ручне дугове. Різання — плазма і болгарка. Захист — порошкове фарбування, ґрунтування, оцинкування.</p>
+      <p class="services-info-text">Працюю зі звичайним прокатом (труба, куток, смуга), нержавіючою сталлю, алюмінієм, чавуном і кольоровими металами. Зварювання — полуавтомат, аргон, алюміній, ручне дугове. Різання — плазма і болгарка. Захист — фарбування, ґрунтування, оцинкування.</p>
     </div>
     <div class="services-info-col">
       <h3 class="services-info-title">Як рахується ціна</h3>
@@ -347,12 +340,12 @@
       <div class="portfolio-cta-row"><a href="#contact" class="btn-primary"><span>Обговорити Свій Проєкт</span> <span>→</span></a></div>
     </div>
     <div class="portfolio-collage" id="portfolioCollage">
-      <div class="portfolio-item pi-1 reveal" data-gallery="Сходи" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🪜</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Вибране</div><div class="portfolio-label">Спіральні Сходи — Приватна Резиденція</div></div>
-      <div class="portfolio-item pi-2 reveal reveal-delay-1" data-gallery="Перила" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🔩</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Поручень</div><div class="portfolio-label">Скляно-сталеве Огородження</div></div>
-      <div class="portfolio-item pi-3 reveal reveal-delay-2" data-gallery="Навіси" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏗️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Конструкція</div><div class="portfolio-label">Промисловий Навіс</div></div>
-      <div class="portfolio-item pi-4 reveal reveal-delay-1" data-gallery="Ворота" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🎨</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Художнє</div><div class="portfolio-label">Ковані Ворота</div></div>
-      <div class="portfolio-item pi-5 reveal reveal-delay-2" data-gallery="Двері" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">⚙️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Індивідуальне</div><div class="portfolio-label">Рама Антресолі</div></div>
-      <div class="portfolio-item pi-6 reveal reveal-delay-3" data-gallery="Дашки" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏛️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Балкон</div><div class="portfolio-label">Конструкція Тераси</div></div>
+      <div class="portfolio-item pi-1 reveal" data-gallery="Сходи" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🪜</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Сходи</div><div class="portfolio-label">Спіральні Сходи — Приватна Резиденція</div></div>
+      <div class="portfolio-item pi-2 reveal reveal-delay-1" data-gallery="Перила" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🔩</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Перила</div><div class="portfolio-label">Скляно-сталеве Огородження</div></div>
+      <div class="portfolio-item pi-3 reveal reveal-delay-2" data-gallery="Навіси" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏗️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Навіс</div><div class="portfolio-label">Промисловий Навіс</div></div>
+      <div class="portfolio-item pi-4 reveal reveal-delay-1" data-gallery="Ворота" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🎨</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Ворота</div><div class="portfolio-label">Ковані Ворота</div></div>
+      <div class="portfolio-item pi-5 reveal reveal-delay-2" data-gallery="Двері" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">⚙️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Двері</div><div class="portfolio-label">Рама Антресолі</div></div>
+      <div class="portfolio-item pi-6 reveal reveal-delay-3" data-gallery="Дашки" data-pidx="0" data-photo="0"><div class="portfolio-img-bg"></div><div class="portfolio-icon">🏛️</div><div class="portfolio-overlay"></div><div class="portfolio-tag">Дашок</div><div class="portfolio-label">Конструкція Тераси</div></div>
     </div>
   </div>
 </section>
@@ -376,7 +369,7 @@
 <section class="about-section" id="about">
   <div class="about-layout">
       <div class="workshop-visual reveal visible" style="width: 100%">
-        <iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Zhukovskoho%20Ln,%201,%20Cherkasy,%20Cherkas'ka%20oblast,%20Ukraine,%2018005+(%D0%9E%D0%BB%D0%B5%D0%BA%D1%81%D1%96%D0%B9%20%D0%9A%D1%83%D0%B7%D1%96%D0%BD)&t=&z=14&ie=UTF8&iwloc=B&output=embed" loading="lazy"></iframe>
+        <iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=49.4180372942995,%2032.07384584568363+(My%20Business%20Name)&amp;t=&amp;z=19&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" loading="lazy"></iframe>
       </div>
       <div class="about-content reveal reveal-delay-2">
         <div class="section-label">Майстер</div>
@@ -394,7 +387,7 @@
           <span class="badge">Будь-який метал</span>
           <span class="badge">Плазмове Різання</span>
           <span class="badge">Гаряче Кування</span>
-          <span class="badge">Порошкове Покриття</span>
+          <span class="badge">Аргон</span>
           <span class="badge">Монтаж на Місці</span>
         </div>
       </div>
@@ -414,7 +407,7 @@
       <a href="tel:+380635349922" class="contact-phone">+38 063 534 99 22</a>
       <a href="tel:+380964206979" class="contact-phone">+38 096 420 69 79</a>
     </div>
-   <p class="contact-phone-label">Дзвоніть або пишіть будь-коли · Пн–Сб 6:00–20:00</p>
+   <p class="contact-phone-label">Пишіть у будь-який час · Дзвінки: Пн–Нд 7:00–20:00</p>
    </div>
     <div class="contact-buttons reveal reveal-delay-2">
       <a href="https://wa.me/380964206979" class="btn-whatsapp" target="_blank" rel="noopener noreferrer">
@@ -439,29 +432,29 @@
     </div>
 
     <!-- NAP block — visible address for local SEO -->
-    <address class="nap-block reveal reveal-delay-4" itemscope itemtype="https://schema.org/HomeAndConstructionBusiness">
+    <address class="nap-block reveal reveal-delay-4">
       <div class="nap-grid">
         <div class="nap-item">
           <div class="nap-label">Майстер</div>
-          <span itemprop="name">Кузін Олексій Леонідович</span>
+          <span>Кузін Олексій Леонідович</span>
         </div>
         <div class="nap-item">
           <div class="nap-label">Адреса</div>
-          <span itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
-            <span itemprop="streetAddress">провулок Жуковського, 1</span>,
-            <span itemprop="addressLocality">Черкаси</span>,
-            <span itemprop="addressRegion">Черкаська область</span>,
-            <span itemprop="postalCode">18005</span>
+          <span>
+            <span>провулок Жуковського, 1</span>,
+            <span>Черкаси</span>,
+            <span>Черкаська область</span>,
+            <span>18005</span>
           </span>
         </div>
         <div class="nap-item">
           <div class="nap-label">Телефони</div>
-          <a href="tel:+380635349922" itemprop="telephone">+38 063 534 99 22</a><br>
-          <a href="tel:+380964206979" itemprop="telephone">+38 096 420 69 79</a>
+          <a href="tel:+380635349922">+38 063 534 99 22</a><br>
+          <a href="tel:+380964206979">+38 096 420 69 79</a>
         </div>
         <div class="nap-item">
-          <div class="nap-label">Графік роботи</div>
-          <span itemprop="openingHours" content="Mo-Sa 06:00-20:00">Пн–Сб: 6:00–20:00</span>
+          <div class="nap-label">Графік прийому дзвінків</div>
+          <span>Пн–Нд: 7:00–20:00</span>
         </div>
         <div class="nap-item">
           <div class="nap-label">Зона виїзду</div>
@@ -540,7 +533,7 @@
 </div>
 
 <!-- ============================================================
-     GALLERY DATA (зовнішній файл — не редагувати структуру)
+     GALLERY DATA
      ============================================================ -->
 
 <script src="gallery_data.js"></script>
